@@ -1,0 +1,8 @@
+api_fragment:
+    type: rest
+    resource: ApiBundle\Controller\FragmentController
+    name_prefix:  api_
+api_video:
+    type: rest
+    resource: ApiBundle\Controller\VideoController
+    name_prefix:  api_

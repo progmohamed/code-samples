@@ -1,0 +1,123 @@
+{% extends ':admin:base.html.twig' %}
+{% import "AdminBundle:Main:_helper.html.twig" as helper %}
+
+{% set sideMenuActiveSection = 'zekr' %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">الرئيسة</a>
+            </li>
+            <li class="active">أسماء السور</li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block gridFilter %}
+    {% form_theme formFilter ':admin:filterFormTheme.html.twig' %}
+    {{ form_errors(formFilter) }}
+    <form id="gridFilter" novalidate action="{{formFilter.vars.action}}" method="post">
+        {{ form_rest(formFilter) }}
+        <br>
+        <button name="submit" class="btn btn-sm btn-primary" type="submit">بحث</button>
+        <button name="reset" class="btn btn-sm" type="reset">مسح</button>
+    </form>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h1>أسماء السور</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th class="center" width="35">
+                            <label>
+                                <input type="checkbox" class="ace" />
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        <th>ID</th>
+                        <th>الإسم</th>
+                        <th>عدد الآيات</th>
+                        <th>عدد الفديوهات</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for entity in entities %}
+                        <tr>
+                            <td class="center" width="35">
+                                <label>
+                                    <input type="checkbox" class="ace" value="{{ entity.id }}" name="idx[]" />
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+                            <td>{{ entity.id }}</td>
+                            <td>{{ entity.translate(app.request.locale).name }}</td>
+                            <td>{{ entity.ayatSum }}</td>
+                            <td>{{ entity.numTopics }}</td>
+                            <td>
+                                <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+                                    <a class="blue" href="{{ path('zekr_surah_show', { 'id': entity.id }) }}">
+                                        <i class="icon-zoom-in bigger-130"></i>
+                                    </a>
+
+                                    <a class="green" href="{{ path('zekr_surah_edit', { 'id': entity.id }) }}">
+                                        <i class="icon-pencil bigger-130"></i>
+                                    </a>
+
+                                </div>
+
+                                <div class="visible-xs visible-sm hidden-md hidden-lg">
+                                    <div class="inline position-relative">
+                                        <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown">
+                                            <i class="icon-caret-down icon-only bigger-120"></i>
+                                        </button>
+
+                                        <ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
+                                            <li>
+                                                <a href="{{ path('zekr_surah_show', { 'id': entity.id }) }}" class="tooltip-info" data-rel="tooltip" title="View">
+                                                    <span class="blue">
+                                                        <i class="icon-zoom-in bigger-120"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="{{ path('zekr_surah_edit', { 'id': entity.id }) }}" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                    <span class="green">
+                                                        <i class="icon-edit bigger-120"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div><!-- /.table-responsive -->
+        </div><!-- /span -->
+    </div><!-- /row -->
+
+{% endblock %}
+
+{% block bottomScripts %}
+    {{ helper.gridJavaScripts(path('zekr_surah_list')) }}
+{% endblock %}

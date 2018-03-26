@@ -1,0 +1,107 @@
+{% extends ':admin:base.html.twig' %}
+
+{% set sideMenuActiveSection = 'zekr' %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">الرئيسة</a>
+            </li>
+            <li><a href="{{ path('zekr_videoreport_list') }}">الإبلاغ عن الفيديوهات</a></li>
+            <li class="active">عرض بلاغ</li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-header">
+        <h1>عرض بلاغ</h1>
+    </div>
+
+    <div class="btn-group fly">
+        <a class="btn btn-sm btn-inverse" href="{{ path('zekr_videoreport_list') }}">القائمة</a>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+
+            <table class="table table-bordered table-striped">
+                <tbody>
+                <tr>
+                    <th width="100">Id</th>
+                    <td>{{ entity.id }}</td>
+                </tr>
+                <tr>
+                    <th>التاريخ/الوقت</th>
+                    <td>
+                        {{ entity.dateTime|date('Y-m-d H:i:s') }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>سبب الإبلاغ</th>
+                    <td>
+                        {% if constant('CONTRARY_CONTENT', entity) == entity.reason %}
+                            <span class="label label-danger">محتوى مخالف</span>
+                        {% elseif constant('PRIVACY_INFRINGEMENT', entity) == entity.reason %}
+                            <span class="label label-info">إنتهاك خصوصية</span>
+                        {% elseif constant('COPYRIGHT_INFRINGEMENT', entity) == entity.reason %}
+                            <span class="label label-warning">إنتهالك حقوق نشر</span>
+                        {% elseif constant('OTHER', entity) == entity.reason %}
+                            <span class="label label-inverse">اخرى</span>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>البلاغ</th>
+                    <td>
+                        {{ entity.message|nl2br }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>الفيديو</th>
+                    <td>
+                        <div><a href="{{ path('zekr_video_show', { 'id': entity.video.id }) }}">الذهاب الى الفيديو</a></div>
+                        <br />
+                        <div id="videoPlayer">Loading the player...</div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block bottomScripts %}
+    <script src="{{ asset('bundles/admin/js/jwplayer-7.10.5/jwplayer.js') }}"></script>
+    <script>jwplayer.key="5c1omjHSXIRGjHtO0n3DHV1FM9EgrndWz6cVpg==";</script>
+    <script>
+        var VideoSources = [
+            {
+                file: "{{ app.request.getSchemeAndHttpHost() ~ asset('upload/video/'~entity.video.hdFile) }}",
+                label: "HD",
+            }, {
+                file: "{{ app.request.getSchemeAndHttpHost() ~ asset('upload/video/'~entity.video.sdFile) }}",
+                label: "SD",
+                default: true
+            }
+        ];
+
+        jwplayer("videoPlayer").setup({
+            sources: VideoSources,
+            aspectratio: "16:9",
+            width: "50%",
+            image: "{{ app.request.getSchemeAndHttpHost() ~ asset('upload/video/video_thumbnail/'~entity.video.getThumbnailFile) }}"
+        });
+    </script>
+{% endblock %}

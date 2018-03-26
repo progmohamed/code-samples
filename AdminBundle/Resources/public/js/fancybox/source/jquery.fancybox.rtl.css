@@ -1,0 +1,19 @@
+.fancybox-prev {
+    right: 0 !important;
+    left: inherit;
+}
+.fancybox-prev span {
+    background-position: 0 -72px;
+    right: 10px !important;
+    left: inherit;
+}
+
+.fancybox-next {
+	left: 0 !important;
+    right: inherit;
+}
+.fancybox-next span {
+    background-position: 0 -36px;
+	left: 10px !important;
+    right: inherit;
+}

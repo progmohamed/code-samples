@@ -1,0 +1,181 @@
+{% extends ':admin:base.html.twig' %}
+{% import "AdminBundle:Main:_helper.html.twig" as helper %}
+
+{% set sideMenuActiveSection = 'zekr' %}
+
+{% block head %}
+    {{ parent() }}
+    <style>
+
+        /* some styling for table1 */
+        table#sortable tr.sorting-row td {
+            background-color: #ccc;
+        }
+
+        table#sortable.sorting-table {
+            cursor: ns-resize;
+            box-shadow: none;
+            outline: 1px solid #333;
+        }
+
+        table#sortable.sorting-table tbody tr:not(.sorting-row) td {
+            opacity: 1;
+            color: #bbb;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+        }
+    </style>
+{% endblock %}
+
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">الرئيسة</a>
+            </li>
+            <li><a href="{{ path('zekr_collection_list') }}">إعادة ترتيب فيديوهات المجموعة</a></li>
+            <li class="active"><td>{{ entity.translate(app.request.locale).name }}</td></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h1>إعادة ترتيب فيديوهات المجموعة {{ entity.translate(app.request.locale).name }}</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <table id="sortable" class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>عنوان الفيديو</th>
+                        <th>الصورة</th>
+                        <th>مفعل</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for videoCollection in videos_for_collection %}
+                        <tr class="sortable-row" data-id="{{ videoCollection.id }}">
+                            <td>{{ videoCollection.video.id }}</td>
+                            <td>{{ videoCollection.video.translate(app.request.locale).title }}</td>
+                            <td style="padding:2px !important;">
+                                <a class="fancybox" rel="gallery" href="{{ asset('upload/video/video_thumbnail/'~videoCollection.video.getThumbnailFile) }}" >
+                                    <img class="lazy" data-src="{{ videoCollection.video.getThumbnailFile | imagine_filter('video_thumbnail_70')  }}" />
+                                </a>
+                            </td>
+                            <td>
+                                {% if videoCollection.video.active %}
+                                    <span class="icon-check"></span>
+                                {% else %}
+                                    <span class=" icon-check-empty"></span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+                                    <a class="blue" href="{{ path('zekr_video_show', { 'id': videoCollection.video.id }) }}">
+                                        <i class="icon-zoom-in bigger-130"></i>
+                                    </a>
+                                </div>
+
+                                <div class="visible-xs visible-sm hidden-md hidden-lg">
+                                    <div class="inline position-relative">
+                                        <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown">
+                                            <i class="icon-caret-down icon-only bigger-120"></i>
+                                        </button>
+
+                                        <ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
+                                            <li>
+                                                <a href="{{ path('zekr_video_show', { 'id': videoCollection.video.id }) }}" class="tooltip-info" data-rel="tooltip" title="View">
+                                                    <span class="blue">
+                                                        <i class="icon-zoom-in bigger-120"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div><!-- /.table-responsive -->
+
+            <div class="clearfix form-actions">
+                <div class="col-md-12">
+                    <button class="btn btn-info" id="resort-btn" name="submit">
+                        <i class="icon-ok bigger-110"></i> إعتماد
+                    </button>
+                </div>
+            </div>
+
+
+        </div><!-- /span -->
+    </div><!-- /row -->
+
+{% endblock %}
+
+
+{% block bottomScripts %}
+    <script src="{{ asset('bundles/admin/js/rowsorter/RowSorter.js') }}"></script>
+    {% include ':admin:_fancyboxIncludes.html.twig' %}
+    <script src="{{ asset('bundles/zekr/js/lazy-load/jquery.lazy.min.js') }}"></script>
+
+    <script>
+
+        jQuery(function ($) {
+
+            $('.lazy').Lazy();
+            $(".fancybox").fancybox({
+                openEffect: 'none',
+                closeEffect: 'none',
+                nextEffect: 'none',
+                prevEffect: 'none',
+                helpers: {
+                    overlay: {
+                        locked: false
+                    }
+                }
+            });
+        });
+
+        $("#resort-btn").click(function () {
+            $("#resort-btn").prop('disabled', true);
+            $("#resort-btn").append("<i class='icon-spinner icon-spin orange bigger-125' id='sending-sortine'></i>");
+            var sortArr = [];
+            $('.sortable-row').each(function () {
+                sortArr.push($(this).data('id'));
+            });
+
+            $.ajax({
+                method: "POST",
+                url: "{{ path('zekr_collection_resort_video_ajax', {'id':entity.id}) }}",
+                data: {
+                    'sortArr': sortArr
+                },
+                dataType: "json",
+            }).done(function() {
+                $("#resort-btn").prop('disabled', false);
+                $("#sending-sortine").remove();
+            })
+        })
+        RowSorter('#sortable');
+    </script>
+
+{% endblock %}

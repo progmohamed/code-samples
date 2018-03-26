@@ -1,0 +1,22 @@
+services:
+    search.service:
+        class: SearchBundle\Service\Search\Search
+        arguments: ["@service_container"]
+    search.solrconfig.service:
+        class: SearchBundle\Service\SolrConfigService
+        arguments: ["@service_container"]
+    history.service:
+        class: SearchBundle\Service\Search\HistoryService
+        calls:
+            - [setContainer, ['@service_container']]
+
+    log.backend.menu:
+        class:  SearchBundle\DataFixtures\ORM\LoadMenu
+        tags:
+            - { name: backend.menu.fixture }
+    history.entity.subscriber:
+        class: SearchBundle\Subscriber\EntitySubscriber
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }

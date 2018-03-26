@@ -1,0 +1,12 @@
+services:
+
+    taskmanager.service:
+        class: TaskManagerBundle\Service\TaskManagerService
+        calls:
+            - [setContainer, ['@service_container']]
+
+
+    taskmanager.backend.menu:
+        class:  TaskManagerBundle\DataFixtures\ORM\LoadMenu
+        tags:
+            - { name: backend.menu.fixture }

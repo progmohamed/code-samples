@@ -1,0 +1,62 @@
+{% extends ':admin:base.html.twig' %}
+
+{% set sideMenuActiveSection = 'admin_user_management' %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">{{ 'admin.titles.home'|trans }}</a>
+            </li>
+            <li><a href="{{ path('admin_user') }}">{{ 'admin.menu.users'|trans }}</a></li>
+            <li class="active">{{ 'admin.titles.show_item'|trans }}</li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-header">
+        <h1>{{ 'admin.titles.show_item'|trans }}</h1>
+    </div>
+
+    <div class="btn-group screenTopButtons">
+        <a class="btn btn-sm btn-inverse" href="{{ path('admin_user') }}">{{ 'admin.titles.list'|trans }}</a>
+        <a class="btn btn-sm btn-success" href="{{ path('admin_user_new') }}">{{ 'admin.titles.add'|trans }}</a>
+        <a class="btn btn-sm btn-info" href="{{ path('admin_user_edit', { 'id': entity.id }) }}">{{ 'admin.titles.edit'|trans }}</a>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+
+            {% include('AdminBundle:User:_show.html.twig') %}
+
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block bottomScripts %}
+    {% include ':admin:_fancyboxIncludes.html.twig' %}
+    <script type="text/javascript">
+        jQuery(function($) {
+            $(".fancybox").fancybox({
+                openEffect	: 'none',
+                closeEffect	: 'none',
+                nextEffect : 'none',
+                prevEffect : 'none',
+                helpers: {
+                    overlay: {
+                        locked: false
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

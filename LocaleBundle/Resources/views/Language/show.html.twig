@@ -1,0 +1,101 @@
+{% extends ':admin:base.html.twig' %}
+
+{% set sideMenuActiveSection = 'locale_management' %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">{{ 'admin.titles.home'|trans }}</a>
+            </li>
+            <li><a href="{{ path('locale_language_list') }}">{{ 'locale.menu.langs'|trans }}</a></li>
+            <li class="active">{{ 'locale.titles.language.show_item'|trans }}</li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-header">
+        <h1>{{ 'locale.titles.language.show_item'|trans }}</h1>
+    </div>
+
+    <div class="btn-group screenTopButtons">
+        <a class="btn btn-sm btn-inverse" href="{{ path('locale_language_list') }}">{{ 'admin.titles.list'|trans }}</a>
+        <a class="btn btn-sm btn-success" href="{{ path('locale_language_new') }}">{{ 'admin.titles.add'|trans }}</a>
+        <a class="btn btn-sm btn-info" href="{{ path('locale_language_edit', { 'id': entity.id }) }}">{{ 'admin.titles.edit'|trans }}</a>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+
+            <table class="table table-bordered table-striped">
+                <tbody>
+                <tr>
+                    <th width="100">{{ 'admin.titles.id'|trans }}</th>
+                    <td>{{ entity.id }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'locale.titles.language.lang_name'|trans }}</th>
+                    <td>{{ entity.name }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'locale.titles.language.lang_code'|trans }}</th>
+                    <td>{{ entity.locale }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'locale.titles.language.lang_direction'|trans }}</th>
+                    <td>{{ entity.direction }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'locale.titles.language.lang_switch_frontEnd'|trans }}</th>
+                    <td>
+                        {% if entity.switchFrontEnd %}
+                            <span class="icon-check"></span>
+                        {% else %}
+                            <span class=" icon-check-empty"></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ 'locale.titles.language.lang_switch_backEnd'|trans }}</th>
+                    <td>
+                        {% if entity.switchBackEnd %}
+                            <span class="icon-check"></span>
+                        {% else %}
+                            <span class=" icon-check-empty"></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ 'locale.titles.language.lang_translate_content'|trans }}</th>
+                    <td>
+                        {% if entity.translateContent %}
+                            <span class="icon-check"></span>
+                        {% else %}
+                            <span class=" icon-check-empty"></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ 'locale.titles.language.lang_flag'|trans }}</th>
+                    <td>
+                        {% if entity.photo %}
+                            <div>
+                                <img src="{{ asset('upload/langs/'~entity.photo) }}?{{ uniq_id() }} "/>
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}

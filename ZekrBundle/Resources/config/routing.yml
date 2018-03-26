@@ -1,0 +1,3 @@
+zekr_homepage:
+    path:     /
+    defaults: { _controller: ZekrBundle:Default:index }

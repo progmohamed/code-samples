@@ -1,0 +1,187 @@
+{% macro homePageSection(section) %}
+    {% set sectionGranted = false %}
+    {% for item in section.items if not sectionGranted %}
+        {% if is_granted_any(item.getRoleArray()) or is_granted('ROLE_SUPER_ADMIN') %}
+            {% set sectionGranted = true %}
+        {% endif %}
+    {% endfor %}
+
+    {% if sectionGranted %}
+        <legend>{{ section.title|trans }}</legend>
+        <span class="custom-home-section" data-step="{{section.descriptionSort }}" data-intro="{{ section.description|trans }}">
+            <div class="dashboardPanel">
+            {% for item in section.items %}
+                {% if is_granted_any(item.getRoleArray()) or is_granted('ROLE_SUPER_ADMIN') %}
+                    <div class="dashboardIconWrapper" data-step="{{item.descriptionSort }}" data-intro="{{ item.description|trans }}">
+                        <div class="dashboardIcon"><a href="{{ path(item.getRoute(), item.getRouteParameters()) }}"><img alt="" src="{{ asset(item.image) }}" /><span>{{ item.title|trans }}</span></a></div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+        </span>
+    {% endif %}
+{% endmacro %}
+
+{% macro breadcrumb(elements) %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">{{ 'admin.titles.home'|trans }}</a>
+            </li>
+            {% for element in elements %}
+                {% if element[1] is defined %}
+                    <li><a href="{{ element[1] }}">{{ element[0] }}</a></li>
+                {% else %}
+                    <li class="active">{{ element[0] }}</li>
+                {% endif %}
+
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}
+
+
+{% macro gridFilter(formFilter) %}
+    {% form_theme formFilter ':admin:filterFormTheme.html.twig' %}
+    {{ form_errors(formFilter) }}
+    <form id="gridFilter" novalidate action="{{formFilter.vars.action}}" method="post">
+        {{ form_rest(formFilter) }}
+        <br>
+        <button name="submit" class="btn btn-sm btn-primary" type="submit">{{ 'admin.titles.search'|trans }}</button>
+        <button name="reset" class="btn btn-sm" type="reset">{{ 'admin.titles.reset'|trans }}</button>
+    </form>
+{% endmacro %}
+
+
+{% macro pageTitle(title1, title2) %}
+    <div class="page-header">
+        <h1>
+            {{ title1 }}
+            {% if title2 %}
+            <small>
+                <i class="icon-double-angle-right"></i> {{ title2 }}
+            </small>
+            {% endif %}
+        </h1>
+    </div>
+{% endmacro %}
+
+
+{% macro formSubmitButton(label) %}
+<div class="clearfix form-actions">
+    <div class="col-md-offset-2 col-md-10">
+        <button class="btn btn-info" type="submit" name="submit">
+            <i class="icon-ok bigger-110"></i>{{ label }}
+        </button>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro showTranslatableFormErrorAlertIfAny(form, msg = null) %}
+    {% if not form.vars.valid %}
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button> {% if msg is not null %} {{ msg }} {% else %} {{ 'admin.messages.unable_to_save_the_entity_because_translations'|trans }} {% endif %}
+
+            <br>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro sideMenuSection(section, activeSection) %}
+    {% set sectionGranted = false %}
+    {% for item in section.items if not sectionGranted %}
+        {% if is_granted_any(item.getRoleArray()) or is_granted('ROLE_SUPER_ADMIN') %}
+            {% set sectionGranted = true %}
+        {% endif %}
+    {% endfor %}
+
+    {% if sectionGranted %}
+    <li class="{% if activeSection == section.identifier %}active open{% endif %}">
+        <a href="#" class="dropdown-toggle">
+            {% if section.image %}
+                <img src="{{ asset( section.image ) }}" class="sideMenuSectionIcon" />
+            {% else %}
+                <i class="icon-edit"></i>
+            {% endif %}
+            <span class="menu-text"> {{ section.title|trans }} </span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+        <ul class="submenu">
+            {% for item in section.items %}
+                {% if is_granted_any(item.getRoleArray()) or is_granted('ROLE_SUPER_ADMIN') %}
+                <li class="{#active#}">
+                    <a href="{{ path(item.getRoute(), item.getRouteParameters()) }}">
+                        <i class="icon-double-angle-right"></i>
+                        {{ item.title|trans }}
+                    </a>
+                </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </li>
+    {% endif %}
+{% endmacro %}
+
+
+{% macro gridJavaScripts(filterResetUrl) %}
+    <script src="{{ asset('bundles/admin/js/grid.js') }}"></script>
+    <script src="{{ asset('bundles/admin/ace/assets/js/chosen.jquery.min.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/admin/js/moment/moment.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('bundles/admin/js/datetimepicker/bootstrap-datetimepicker.css') }}" />
+    <script type="text/javascript" src="{{ asset('bundles/admin/js/datetimepicker/bootstrap-datetimepicker.js') }}"></script>
+
+    <script type="text/javascript">
+        jQuery(function($) {
+            $('table th input:checkbox').on('click' , function(){
+                var that = this;
+                $(this).closest('table').find('tr > td:first-child input:checkbox')
+                        .each(function(){
+                            this.checked = that.checked;
+                            $(this).closest('tr').toggleClass('selected');
+                        });
+            });
+
+
+            $('#gridFilter .date').datetimepicker({
+                format: 'L',
+                disableTime: true
+            });
+            $('#gridFilter .dateTime').datetimepicker();
+
+
+
+            $('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+            function tooltip_placement(context, source) {
+                var $source = $(source);
+                var $parent = $source.closest('table')
+                var off1 = $parent.offset();
+                var w1 = $parent.width();
+
+                var off2 = $source.offset();
+                var w2 = $source.width();
+
+                if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+                return 'left';
+            }
+
+            {% if filterResetUrl is defined %}
+                $('#gridFilter select')
+                        .attr('data-placeholder',"{{ 'admin.messages.select_some_options'|trans }}")
+                        .addClass('chosen-select')
+                        .chosen({width: "100%"});
+                $('#gridFilter button[name=reset]').click(function() {
+                    window.location.href = "{{ filterResetUrl }}";
+                });
+            {% endif %}
+
+        })
+    </script>
+{% endmacro %}

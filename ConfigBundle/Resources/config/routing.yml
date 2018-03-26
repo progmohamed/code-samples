@@ -1,0 +1,3 @@
+config_homepage:
+    path:     /
+    defaults: { _controller: ConfigBundle:Default:index }

@@ -1,0 +1,3 @@
+locale_homepage:
+    path:     /
+    defaults: { _controller: LocaleBundle:Default:index }

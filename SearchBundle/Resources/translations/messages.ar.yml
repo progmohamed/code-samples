@@ -1,0 +1,11 @@
+search:
+    menu:
+        search: البحث
+        history: سجلات البحث
+    hints:
+        search: وهنا تجد التحكم في البحث
+        history: اما هنا فيمكنك مراجعة سجلات البحث
+
+    history:
+        string: الجملة
+        sum: عدد المرات

@@ -1,0 +1,45 @@
+locale:
+    menu:
+        locale: اللغات
+        countries: الدول
+        langs: اللغات
+        dialect: اللهجات
+    hints:
+        countries: وهنا تجد التحكم في الدول فيمكنك إضافة او حذف او تعديل اي دولة تريدها
+        langs: اما هنا فيمكنك التحكم في لغات موقع ذكر فيمكنك إضافة او حذف لغة والتحكم في كيفية ظهورها للمستخدم
+        dialect: اما هنا فيمكنك التحكم في اللهجات فيمكنك إضافة او حذف لهجة والتحكم في كيفية ظهورها للمستخدم
+    log:
+        add_country: تم إضافة الدولة رقم %entity_id%
+        edit_country: تم تعديل الدولة رقم %entity_id%
+        delete_country: تم حذف الدولة رقم %entity_id%
+
+        add_language: تم إضافة اللغة رقم %entity_id%
+        edit_language: تم تعديل اللغة رقم %entity_id%
+        delete_language: تم حذف اللغة رقم %entity_id%
+
+        add_dialect: تم إضافة اللهجة رقم %entity_id%
+        edit_dialect: تم تعديل اللهجة رقم %entity_id%
+        delete_dialect: تم حذف اللهجة رقم %entity_id%
+    titles:
+        country:
+            new_item: إضافة دولة جديدة
+            edit_item: تعديل الدولة
+            show_item: عرض تفاصيل الدولة
+        dialect:
+            new_item: إضافة لهجة جديدة
+            edit_item: تعديل اللهجة
+            show_item: عرض تفاصيل اللهجة
+            dialect_name: إسم اللهجة
+        language:
+            new_item: إضافة لغة جديدة
+            edit_item: تعديل اللغة
+            show_item: عرض تفاصيل اللغة
+            lang_name: اسم اللغة
+            lang_code: كود اللغة
+            lang_direction: اتجاه اللغة
+            lang_rtl: من اليمين إلى اليسار
+            lang_ltr: من اليسار إلى اليمين
+            lang_flag: صورة العلم
+            lang_switch_frontEnd: الإنتقال إلى اللغة - فرونت إيند
+            lang_switch_backEnd: الإنتقال إلى اللغة - باك إيند
+            lang_translate_content: ترجمة المحتوى

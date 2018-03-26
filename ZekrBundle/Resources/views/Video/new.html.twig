@@ -1,0 +1,600 @@
+{% extends ':admin:base.html.twig' %}
+
+{% import "AdminBundle:Main:_helper.html.twig" as helper %}
+
+{% set sideMenuActiveSection = 'zekr' %}
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/admin/ace/assets/css/chosen.css') }}"/>
+    <link rel="stylesheet" href="//blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+    <link rel="stylesheet" href="{{ asset('bundles/admin/js/jQuery-File-Upload-9.12.5/css/jquery.fileupload.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/admin/js/jQuery-File-Upload-9.12.5/css/jquery.fileupload-ui.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/zekr/css/dropzone.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/zekr/css/custom.css') }}">
+{% endblock %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">الرئيسة</a>
+            </li>
+            <li><a href="{{ path('zekr_video_list') }}">الفيديوهات</a></li>
+            <li class="active">إضافة فيديو</li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>إضافة فيديو</h1>
+    </div>
+
+
+    <div class="btn-group fly">
+        <a class="btn btn-sm btn-inverse" href="{{ path('zekr_video_list') }}">القائمة</a>
+        <a class="btn btn-sm btn-info" href="{{ path('zekr_video_ftp_video') }}">إضافة من ال FTP</a>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+
+
+            <div style="clear: both"></div>
+
+            <div class="form-group">
+                <div class="col-sm-12">
+                    {% if(tempVideo.getFile) is defined %}
+                        <div id="videoPlayer">Loading the player...</div>
+                    {% else %}
+                        <div class="dropzone dz-clickable upload-new-video-component">
+                            <div class="dz-default dz-message"><span>
+                                            <span class="bigger-150 bolder">
+                                                <i class="icon-caret-right blue"></i>
+                                                أفلت ملف
+                                            </span>
+                                            للرفع
+                                            <span class="smaller-80 grey">(أو إضعط هنا)</span>
+                                            <br>
+                                            <i class="upload-icon icon-cloud-upload blue icon-3x"></i>
+                                        </span>
+                            </div>
+                        </div>
+
+                    <form id="fileupload" method="POST" enctype="multipart/form-data">
+                        <!-- Redirect browsers with JavaScript disabled to the origin page -->
+                        <noscript><input type="hidden" name="redirect" value=""></noscript>
+                        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                        <div class="row fileupload-buttonbar video-file-upload">
+                            <div class="col-lg-7">
+                                <!-- The fileinput-button span is used to style the file input field as button -->
+                                <span class="btn btn-success fileinput-button">
+                                    <span>Choose file (mp4, flv, webm)</span>
+                                    <input type="file" id="uploader" name="files">
+                                </span>
+
+                                <!-- The global file processing state -->
+                                <span class="fileupload-process"></span>
+                            </div>
+                        </div>
+                        <!-- The table listing the files available for upload/download -->
+                        <table role="presentation" class="table table-striped">
+                            <tbody class="files"></tbody>
+                        </table>
+                    </form>
+                    <br>
+
+                    <!-- The blueimp Gallery widget -->
+                    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+                        <div class="slides"></div>
+                        <h3 class="title"></h3>
+                        <a class="prev">‹</a>
+                        <a class="next">›</a>
+                        <a class="close">×</a>
+                        <a class="play-pause"></a>
+                        <ol class="indicator"></ol>
+                    </div>
+                    <!-- The template to display files available for upload -->
+                    <script id="template-upload" type="text/x-tmpl">
+                    {% raw %}
+                    {% for (var i=0, file; file=o.files[i]; i++) { %}
+                        <tr class="template-upload fade">
+                            <td>
+                                <span class="preview video-element"></span>
+                            </td>
+                            <td>
+                                <p class="name">{%=file.name%}</p>
+                                <strong class="error text-danger"></strong>
+                            </td>
+                            <td>
+                                <p class="size">Processing...</p>
+                                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+                            </td>
+                            <td>
+                                {% if (!i && !o.options.autoUpload) { %}
+                                    <button class="btn btn-primary start" disabled>
+                                        <span>Start</span>
+                                    </button>
+                                {% } %}
+                                {% if (!i) { %}
+                                    <button class="btn btn-warning cancel">
+                                        <span>Cancel</span>
+                                    </button>
+                                {% } %}
+                            </td>
+                        </tr>
+                    {% } %}
+                    {% endraw %}
+
+                    </script>
+                    <!-- The template to display files available for download -->
+                    <script id="template-download" type="text/x-tmpl">
+                    {% raw %}
+
+                    {% for (var i=0, file; file=o.files[i]; i++) { %}
+                        <tr class="template-download fade">
+                            <td>
+                                <span class="preview">
+                                    {% if (file.thumbnailUrl) { %}
+                                        <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                                    {% } %}
+                                </span>
+                            </td>
+                            <td>
+                                <p class="name">
+                                    {% if (file.url) { %}
+                                        <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                                    {% } else { %}
+                                        <span>{%=file.name%}</span>
+                                    {% } %}
+                                </p>
+                                {% if (file.error) { %}
+                                    <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+                                {% } %}
+                            </td>
+                            <td>
+                                <span class="size">{%=o.formatFileSize(file.size)%}</span>
+                            </td>
+                            <td>
+
+                                <button class="btn btn-warning cancel">
+                                    <span>Cancel</span>
+                                </button>
+                            </td>
+                        </tr>
+                    {% } %}
+                    {% endraw %}
+
+                    </script>
+
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <div style="clear: both"></div>
+            <div style="clear: both"></div>
+
+            {{ helper.showTranslatableFormErrorAlertIfAny(form) }}
+
+            {{ form_errors(form) }}
+            {{ form_start(form, {'attr': {'novalidate':'true', 'class': 'form-horizontal', 'role':'form'}}) }}
+
+            <div class="form-group upload-new-video-component">
+                <label class="col-sm-2 control-label no-padding-right"><h4>اعتماد صورة للفيديو</h4></label>
+                <div class="col-sm-10">
+                    <a class="btn btn-sm btn-success" id="thumbnail-time-btn" href="javascript:void(0)">اعتماد صورة</a>
+                    <input type="text" id="thumbnail-time-text" name="thumbnailTimeText" readonly="readonly">
+                    {{ form_errors(form.thumbnailTime) }}
+                    {{ form_widget(form.thumbnailTime) }}
+                    <br/>
+                </div>
+            </div>
+            <div style="clear: both"></div>
+
+
+            {% if(tempVideo.getFile) is not defined %}
+                <div id="uncompleted-video-place">
+                    <div class="form-group col-sm-12">
+                        <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.uncompletedVideo) }} </label>
+                        <div class="col-sm-10">
+                            {{ form_errors(form.uncompletedVideo) }}
+                            {{ form_widget(form.uncompletedVideo) }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div style="clear: both"></div>
+
+            <div class="form-group col-sm-12">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.plainSlug) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.plainSlug) }}
+                    {{ form_widget(form.plainSlug) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.conversion) }} </label>
+                <div class="col-sm-10">
+                    <label>
+                        {{ form_errors(form.conversion) }}
+                        {{ form_widget(form.conversion) }}
+                        <span class="lbl"></span>
+                    </label>
+
+                </div>
+            </div>
+            <div style="clear: both"></div>
+            <div class="tabbable">
+                <ul class="nav nav-tabs" id="myTab">
+                    {% for language in adminHelper.getLanguages() %}
+                        <li{% if loop.first %} class="active"{% endif %}>
+                            <a data-toggle="tab" href="#tab{{ language.id }}">{{ language.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="tab-content">
+                    {% for language in adminHelper.getLanguages() %}
+                        <div id="tab{{ language.id }}" class="tab-pane{% if loop.first %} in active{% endif %}">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form['title_'~language.locale]) }} </label>
+                                <div class="col-sm-10">
+                                    {{ form_errors(form['title_'~language.locale]) }}
+                                    {{ form_widget(form['title_'~language.locale]) }}
+                                </div>
+                            </div>
+                            <div class="space-4"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form['description_'~language.locale]) }} </label>
+                                <div class="col-sm-10">
+                                    {{ form_errors(form['description_'~language.locale]) }}
+                                    {{ form_widget(form['description_'~language.locale]) }}
+                                </div>
+                            </div>
+                            <div class="space-4"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right"
+                                > {{ form_label(form['display_'~language.locale]) }} </label>
+                                <div class="col-sm-10">
+                                    <label>
+                                        {{ form_errors(form['display_'~language.locale]) }}
+                                        {{ form_widget(form['display_'~language.locale]) }}
+                                        <span class="lbl"></span>
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            <div class="space-4"></div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="space-10"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.category) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.category) }}
+                    {{ form_widget(form.category) }}
+                </div>
+            </div>
+
+            <div class="space-10"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.juz) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.juz) }}
+                    {{ form_widget(form.juz) }}
+                </div>
+            </div>
+
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.hizb) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.hizb) }}
+                    {{ form_widget(form.hizb) }}
+                </div>
+            </div>
+
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.surah) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.surah) }}
+                    {{ form_widget(form.surah) }}
+                </div>
+            </div>
+
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.person) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.person) }}
+                    {{ form_widget(form.person) }}
+                </div>
+            </div>
+
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.videoType) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.videoType) }}
+                    {{ form_widget(form.videoType) }}
+                </div>
+            </div>
+
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.rewaya) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.rewaya) }}
+                    {{ form_widget(form.rewaya) }}
+                </div>
+            </div>
+
+            <div class="space-10"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.collection) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.collection) }}
+                    {{ form_widget(form.collection) }}
+                </div>
+            </div>
+
+            <div class="space-10"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.apiProject) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.apiProject) }}
+                    {{ form_widget(form.apiProject) }}
+                </div>
+            </div>
+
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"
+                      > {{ form_label(form.active) }} </label>
+                <div class="col-sm-10">
+                    <label>
+                        {{ form_errors(form.active) }}
+                        {{ form_widget(form.active) }}
+                        <span class="lbl"></span>
+                    </label>
+
+                </div>
+            </div>
+
+            <div class="space-4"></div>
+
+            {{ form_rest(form) }}
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-2 col-md-10">
+                    <button class="btn btn-info" type="submit" name="submit">
+                        <i class="icon-ok bigger-110"></i> إضافة
+                    </button>
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block bottomScripts %}
+
+    <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+    <script src="{{ asset('bundles/admin/js/jQuery-File-Upload-9.12.5/js/vendor/jquery.ui.widget.js') }}"></script>
+    <!-- The Templates plugin is included to render the upload/download listings -->
+    <script src="{{ asset('bundles/admin/js/JavaScript-Templates/js/tmpl.min.js') }}"></script>
+    <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+    <script src="{{ asset('bundles/admin/js/JavaScript-Load-Image/js/load-image.all.min.js') }}"></script>
+    <!-- The Canvas to Blob plugin is included for image resizing functionality -->
+    <script src="{{ asset('bundles/admin/js/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js') }}"></script>
+    <!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
+    <!-- blueimp Gallery script -->
+    <script src="{{ asset('bundles/admin/js/blueimp-gallery/js/jquery.blueimp-gallery.min.js') }}"></script>
+    <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+    <script src="{{ asset('bundles/admin/js/jQuery-File-Upload-9.12.5/js/jquery.iframe-transport.js') }}"></script>
+    <!-- The basic File Upload plugin -->
+    <script src="{{ asset('bundles/admin/js/jQuery-File-Upload-9.12.5/js/jquery.fileupload.js') }}"></script>
+    <!-- The File Upload processing plugin -->
+    <script src="{{ asset('bundles/admin/js/jQuery-File-Upload-9.12.5/js/jquery.fileupload-process.js') }}"></script>
+    <!-- The File Upload image preview & resize plugin -->
+    <script src="{{ asset('bundles/admin/js/jQuery-File-Upload-9.12.5/js/jquery.fileupload-image.js') }}"></script>
+    <!-- The File Upload audio preview plugin -->
+    <script src="{{ asset('bundles/admin/js/jQuery-File-Upload-9.12.5/js/jquery.fileupload-audio.js') }}"></script>
+    <!-- The File Upload video preview plugin -->
+    <script src="{{ asset('bundles/admin/js/jQuery-File-Upload-9.12.5/js/jquery.fileupload-video.js') }}"></script>
+    <!-- The File Upload validation plugin -->
+    <script src="{{ asset('bundles/admin/js/jQuery-File-Upload-9.12.5/js/jquery.fileupload-validate.js') }}"></script>
+    <!-- The File Upload user interface plugin -->
+    <script src="{{ asset('bundles/admin/js/jQuery-File-Upload-9.12.5/js/jquery.fileupload-ui.js') }}"></script>
+    <!-- The main application script -->
+    <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
+    <!--[if (gte IE 8)&(lt IE 10)]>
+    <script src="{{ asset('bundles/admin/js/jQuery-File-Upload-9.12.5/js/cors/jquery.xdr-transport.js') }}"></script>
+    <![endif]-->
+
+
+    <script src="{{ asset('bundles/admin/ace/assets/js/chosen.jquery.min.js') }}"></script>
+
+    <script type="text/javascript">
+        function disableFormElements(disable) {
+            $(':input[type="submit"]').prop('disabled', disable);
+        }
+
+        $(function () {
+            'use strict';
+
+            $(".chosen-select").chosen();
+            $("#video_surah").change(function (){
+                $( "#video_surah option:selected" ).each(function() {
+                    $('#video_hizb>option[value="'+$( this ).data('first_hizb')+'"]').prop('selected', true);
+                    $('#video_juz>option[value="'+$( this ).data('first_juz')+'"]').prop('selected', true);
+                });
+                $('#video_hizb, #video_juz').trigger('chosen:updated');
+            })
+
+            {% if(tempVideo.getFile) is defined %}
+                $("#thumbnail-time-text").val(secondsAsTime($("#video_thumbnailTime").val()));
+                $("#thumbnail-time-btn").click(function () {
+                    jwplayer("videoPlayer").pause(true);
+                    $("#thumbnail-time-text").val(secondsAsTime(jwplayer("videoPlayer").getPosition()));
+                    $("#video_thumbnailTime").val(Math.floor(jwplayer("videoPlayer").getPosition()));
+                })
+            {% else %}
+                $("#thumbnail-time-text").val(secondsAsTime(1));
+                $("#video_thumbnailTime").val(Math.floor(1));
+                $("#thumbnail-time-btn").click(function () {
+                    if ($(".video-element video").get(0)) {
+                        var video = $(".video-element video").get(0);
+                        video.pause();
+                        $("#thumbnail-time-text").val(secondsAsTime(video.currentTime));
+                        $("#video_thumbnailTime").val(Math.floor(video.currentTime));
+                    }
+                })
+            {% endif %}
+
+
+            $(".dropzone").click(function () {
+                $("#uploader").trigger('click');
+            });
+
+            $("#video_plainSlug").keypress(function () {
+                $('#video_plainSlug').data('edited', 1);
+            });
+            $('*[id^="video_title_"]').keypress(function () {
+                $(this).data('edited', 1);
+            });
+
+
+            $("#video_uncompletedVideo").change(function () {
+                $('.upload-new-video-component').hide();
+
+                if ('' == $('#video_plainSlug').data('edited') || '' == $('#video_plainSlug').val()) {
+                    $('#video_plainSlug').val($("#video_uncompletedVideo option:selected").text());
+                }
+
+                $('*[id^="video_title_"]').each(function () {
+
+                    if ('' == $(this).data('edited') || '' == $(this).val()) {
+                        $(this).val($("#video_uncompletedVideo option:selected").text());
+                    }
+
+                })
+
+                $("#video_tempVideo").val($("#video_uncompletedVideo").val());
+                $(':input[type="submit"]').prop('disabled', false);
+            })
+            var filesAdded = 0;
+
+            {% if(tempVideo.getFile) is not defined %}
+            disableFormElements(true);
+            {% else %}
+            $("#video_uncompletedVideo").parent().parent().hide();
+            {% endif %}
+            // Initialize the jQuery File Upload widget:
+            $('#fileupload').fileupload({
+                // Uncomment the following to send cross-domain cookies:
+                //xhrFields: {withCredentials: true},
+                maxNumberOfFiles: 1,
+                url: '{{ path('zekr_video_upload') }}',
+                maxChunkSize: 1000000, // 10 MB
+                autoUpload: true,
+                acceptFileTypes: /(\.|\/)(webm|flv|mp4)$/i,
+                stop: function (e) {
+                },
+                done: function (e, data) {
+                    $("#video_tempVideo").val(data.result);
+                    $(':input[type="submit"]').prop('disabled', false);
+                }
+            }).bind('fileuploadfail', function (e, data) {
+                filesAdded--;
+            }).bind('fileuploadadd', function (e, data) {
+
+                $("#uncompleted-video-place").hide();
+                if (filesAdded >= 1) {
+                    e.preventDefault();
+                    alert('Only one file is allowed');
+                } else {
+                    filesAdded++;
+                }
+
+                if ('' == $('#video_plainSlug').data('edited') || '' == $('#video_plainSlug').val()) {
+                    $('#video_plainSlug').val(data.files[0].name.replace(/\.[^/.]+$/, ""));
+                }
+
+                $('*[id^="video_title_"]').each(function () {
+                    if ('' == $(this).data('edited') || '' == $(this).val()) {
+                        $(this).val(data.files[0].name.replace(/\.[^/.]+$/, ""));
+                    }
+                })
+
+            });
+
+
+            // Enable iframe cross-domain access via redirect option:
+            $('#fileupload').fileupload(
+                'option',
+                'redirect',
+                window.location.href.replace(
+                    /\/[^\/]*$/,
+                    '/cors/result.html?%s'
+                )
+            );
+
+        });
+
+        function secondsAsTime(seconds) {
+            var hours = Math.floor(seconds / 3600);
+            seconds -= hours * 3600;
+            var minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            function pad(n) {
+                return (n < 10) ? '0'+ n : n;
+            }
+            return pad(hours) +':'+ pad(minutes) +':'+ pad(seconds);
+        }
+    </script>
+
+
+    {% if(tempVideo.getFile) is defined %}
+        <script src="{{ asset('bundles/admin/js/jwplayer-7.10.5/jwplayer.js') }}"></script>
+        <script>jwplayer.key="5c1omjHSXIRGjHtO0n3DHV1FM9EgrndWz6cVpg==";</script>
+        <script>
+            jwplayer("videoPlayer").setup({
+                file: "{{ app.request.getSchemeAndHttpHost() ~ asset('upload/video/'~tempVideo.getFile) }}",
+                image: "{{ app.request.getSchemeAndHttpHost() ~ asset('upload/video/video_thumbnail/') }}{{tempVideo.getThumbnailFile}}",
+                aspectratio: "16:9",
+                width: "50%"
+            });
+        </script>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends ':admin:base.html.twig' %}
+
+{% import "AdminBundle:Main:_helper.html.twig" as helper %}
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/admin/js/intro.js-2.5.0/introjs.css') }}">
+    {% if app.request.locale == 'ar' or app.request.locale == 'fa' %}
+        <link rel="stylesheet" href="{{ asset('bundles/admin/js/intro.js-2.5.0/introjs-rtl.css') }}">
+    {% endif %}
+{% endblock %}
+
+{% block navbar_header %}
+    <li class="light-blue">
+        <a href="javascript:void(0);" onclick="startGuid();">
+            <i class="icon-question-sign icon-animated-bell"></i>
+        </a>
+    </li>
+{% endblock %}
+
+{% block content %}
+
+<fieldset>
+
+    {% for section in getAdminSections() %}
+        {{ helper.homePageSection(section) }}
+    {% endfor %}
+
+</fieldset>
+<br/>
+
+{% endblock %}
+
+{% block bottomScripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/admin/js/intro.js-2.5.0/intro.js') }}"></script>
+    <script type="text/javascript">
+        function startGuid() {
+            introJs().setOptions({
+                'nextLabel': '{{ 'admin.titles.after'|trans }}',
+                'prevLabel': '{{ 'admin.titles.before'|trans }}',
+                'skipLabel': '{{ 'admin.titles.exit'|trans }}',
+                'doneLabel': '{{ 'admin.titles.done'|trans }}'
+            }).start();
+        }
+    </script>
+{% endblock %}

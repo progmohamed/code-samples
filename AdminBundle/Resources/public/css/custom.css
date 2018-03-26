@@ -1,0 +1,130 @@
+.screenTopButtons {
+    margin-bottom: 5px;
+}
+.form-control {
+    width:auto !important;
+}
+.cellDate select {
+    display: inline-block;
+}
+.cellRadio label {
+    margin:0 5px;
+}
+.formErrorList li {
+    color:red;
+}
+#gridFilter {
+    padding: 0 5px 10px 5px;
+}
+#gridFilter input[type="text"] {
+    height: 34px;
+}
+#gridFilter .dateTime, #gridFilter .date {
+    direction: ltr;
+}
+
+.sideMenuFilter input[type=text]{
+    width:100%;
+}
+
+.nav-list>li>.submenuNonBordered:before{
+    border:none !important;
+}
+.sideMenuSectionIcon {
+    margin: 0 6px;
+}
+
+/*Dashboard & Side Menu*/
+.dashboardPanel {
+    padding:0 0 10px 0;
+}
+.dashboardPanel .dashboardIconWrapper {
+    display: inline-block;
+    margin-bottom:10px;
+    margin-right:10px;
+    vertical-align: top;
+}
+.dashboardPanel .dashboardIcon {
+    width:120px;
+    height:113px;
+    overflow: hidden;
+    border:solid 1px #ddd;
+}
+.dashboardPanel .dashboardSmallIcon {
+    display: inline-block;
+    border:solid 1px #fff;
+    margin: 2px 2px 0 0;
+}
+.dashboardPanel .dashboardSmallIcon img {
+    width:20px;
+    height:20px;
+}
+
+.dashboardPanel .dashboardIcon:hover {
+    background-color: #ededed;
+    border:solid 1px #438eb9;
+}
+.dashboardPanel .dashboardIcon a, .dashboard .smallIcon a{
+    display: inline-block;
+    width:100%;
+    height: 100%;
+}
+.dashboardPanel .dashboardIcon a:hover {
+    text-decoration: none;
+}
+.dashboardPanel .dashboardIcon img{
+    display: block;
+    margin: 10px auto;
+    width:70px;
+    height: 70px;
+}
+.dashboardPanel .dashboardIcon span{
+    display: block;
+    text-align: center;
+}
+.colorPreview {
+    width: 20px;
+    height: 20px;
+    margin: 0 5px;
+    border: solid 1px gray;
+    display: inline-block;
+}
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+    height: auto !important;
+}
+.pagination > li {
+    display: inline-block !important;
+}
+.exceptionTracer, .exceptionTracer * {
+    direction: ltr;
+    text-align: left;
+}
+.inline > div {
+    display: inline;
+}
+span.required {
+    color: red;
+}
+.iframeInDialog {
+    width:100%;
+    height:100%;
+    border:none;
+}
+.iframeContent .row {
+    margin: 0 !important;
+    background-color: #fff;
+}
+th {
+    text-align: right;
+}
+
+.grid-table th, .grid-table td {
+    text-align: center !important;
+}
+.custom-home-section{
+    display: inline-block;
+}
+
+.nav-list li .submenu {
+    overflow: visible !important;
+}

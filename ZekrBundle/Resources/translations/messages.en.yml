@@ -1,0 +1,48 @@
+zekr:
+    title: Zekr Panel
+    menu:
+        zekr: Zekr Site
+        videos: Videos
+        selected_videos: Selected Videos
+        selected_collections: Selected Collections
+        report: Reported Videos
+        category: Subject Category
+        collection: Collections
+        video_type: Video Type
+        person: Persons
+        juz: Juz's
+        hizb: Hizb's
+        surah: Surah's
+        rewaya: Rewaya's
+        api_project: API Projects
+        newsletter: Newsletter
+        contact_us: Users Messages
+        static_page: static_pages
+        cache: Cache
+    hints:
+        zekr: This is the main section to control the Zekr site that you will use many and in the next steps we will explain it in detail.
+        videos: From here you will have full control over the videos displayed in Zekr site from uploading, converting, activating or deactivating and selecting the Slug that will appear in the search engines and choose the title of the video and its languages and details.
+        selected_videos: From here, you can see and delete selected videos and highlight them mainly to users.
+        selected_collections: From here, you can see and delete selected collections and highlight them mainly to users.
+        report: You can also access the reported videos and the reason for reporting here.
+        category: Here you can control the tree of thematic categories videos from adding, editing, deleting, moving, activating or deactivating.
+        collection: From here, you can control video collections (eg videos that are in a single playlist, etc.) and edit, delete, or arrange them.
+        video_type: From here, you can control video type (eg related videos like aggregates, contests videos, etc.) and edit, delete, or arrange them.
+        person: From here, you can add, delete, or edit Persons.
+        juz: Here you can find the entire Huz's of the Holy Quran and you can translate them into any language you add.
+        hizb: Here you find the Hizb's of the Holy Quran full and also you can translate it to any language you want.
+        surah: Here you will find a complete list of Surah's of the Holy Quran and you can also translate it to any language you choose.
+        rewaya: From here you can add, delete, edit or translate the Rewaya's that will be on the site.
+        api_project: From here, you can add an API project to assign videos to it then show up in mobile applications.
+        newsletter: From here, you can see registered users in the newsletter service.
+        contact_us: From here, you can see the messages sent by users via our contact form.
+        static_page: From here, you can view and modify static pages such as usage agreement, who we are, and so on.
+        cache: From here, you can remove cache.
+    form:
+        report: Report
+        reason: Reason for reporting
+        message: Message
+        contrary_content: Contrary content
+        privacy_infringement: Privacy infringement
+        copyright_infringement: Copyright infringement
+        other: Other

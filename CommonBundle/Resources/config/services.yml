@@ -1,0 +1,11 @@
+services:
+
+    common.service:
+        class: CommonBundle\Service\CommonService
+        calls:
+            - [setContainer, ['@service_container']]
+
+    common.onflushhelper.service:
+        class: CommonBundle\Service\OnFlushHelper
+        calls:
+            - [setContainer, ['@service_container']]

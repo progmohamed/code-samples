@@ -1,0 +1,17 @@
+task_mager:
+    menu:
+        task_mager: Task Manager
+        task_viewer: Task Viewer
+    hints:
+        task_mager: This section is concerned with the tasks that occur in the background such as video conversion and delete some of the items from the site and From here, you can view the tasks performed by the task manager in the background and you can know the status of whether it has been done or is waiting for its role.
+    titles:
+        task: Task/Description
+        category: Category
+        command: Command
+        status: Status
+        inserted_at: Inserted at
+        run_at: Run at
+        finished_at: Finished at
+        status_watting: Watting
+        status_running: Running
+        status_finished: Finished

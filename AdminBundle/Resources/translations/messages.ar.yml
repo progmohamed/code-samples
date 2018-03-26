@@ -1,0 +1,235 @@
+app:
+    title: لوحة تحكم موقع المكتبة الاصدار الجديد
+admin:
+    menu:
+        home_page: الصفحة الرئيسية
+        result_filter: ترشيح النتائج
+        user_management: إدارة المستخدمين
+        users: المستخدمين
+    hints:
+        user_management: هذا الجزء خاص بالادارة العامة للوحة التحكم
+        users: من هنا يمكنك إدارة المستخدمين من تعديل الملفات الشخصية وكلمات المرور وإسناد صلاحيات لهم
+    user:
+        profile: الملف الشخصي
+        log_out: خروج
+        welcome: مرحباً
+    titles:
+        new_item: إضافة مستخدم
+        edit_item: تعديل مستخدم
+        show_item: عرض تفاصيل المستخدم
+        edit_profile: تعديل الملف الشخصي
+        show_profile: عرض الملف الشخصي
+        after: بعد
+        before: قبل
+        exit: خروج
+        done: تم
+        back_end_title: إدارة المؤتمرات والمشروعات
+        home: الرئيسة
+        lang: اللغة
+        main_menu_title_mobile: القائمة
+        dashboard: لوحة التحكم
+        welcome_user: <small>مرحباً</small>, "%username%"
+        logout : تسجيل الخروج
+        profile: الملف الشخصي
+        error_happened: حدث خطا
+        name: الإسم
+        username: اسم المستخدم
+        real_name: الإسم الحقيقي
+        registration_dateTime: تاريخ الإشتراك
+        photo: الصورة
+        remove_photo: حذف الصورة الشخصية
+        website: موقع الويب
+        groups: المجموعات
+        date_of_birth: تاريخ الميلاد
+        password: كلمة المرور
+        confirm_password: تأكيد كلمة المرور
+        user: المستخدم
+        title: العنوان
+        slug: معرف
+        slug_danger: كن حذرا
+        email: البريد الإلكتروني
+        gender: الجنس
+        abstract: نبذة
+        description: الوصف
+        body: الوصف
+        views: المشاهدات
+        add: إضافة
+        edit: تعديل
+        save: حفظ
+        list: القائمة
+        show: معاينة
+        view: معاينة
+        enabled: فعال
+        delete: حذف
+        active: فعال
+        not_active: غير فعال
+        activate: تفعيل
+        deactivate: تعطيل
+        filter: ترشيح
+        reset: إعادة
+        search: بحث
+        clear: مسح
+        close: إغلاق
+        send: إرسال
+        select: اختر
+        selected: تم اختياره
+        not_selected: لم يتم اختيارة
+        role: الصلاحية
+        select_file: اختر ملفاً
+        start_uploading: بدء الرفع
+        upload_file: رفع ملف
+        download: تحميل
+        choose: اختر
+        page: صفحة
+        pages: صفحات
+        id: مسلسل
+        ok: موافق
+        or: او
+        cancel: إلغاء الأمر
+        yes: نعم
+        no: لا
+        yes_execute: نعم, نفذ
+        confirm_batch_action: تأكيد عملية مجمعة
+        batch_operation: عملية مجمعة
+        back: رجوع
+        city:   المدينة
+        country:    الدولة
+        without: بدون
+        no_data: لا توجد بيانات
+        date_time: التاريخ/الوقت
+        date: التاريخ
+        date_to: التاريخ - من
+        date_from: التاريخ - إلى
+        created_at: تاريخ الاضافة
+        updated_at: تاريخ التحديث
+        time: الوقت
+        export: تصدير
+        pagination_results: "النتائج: %results% - صفحة %page% من %pages%"
+        
+        day_sat: السبت
+        day_sun: الأحد
+        day_mon: الإثنين
+        day_tue: الثلاثاء
+        day_wed: الأربعاء
+        day_thu: الخميس
+        day_fri: الجمعة
+        
+        day_short_sat: السبت
+        day_short_sun: الأحد
+        day_short_mon: الإثنين
+        day_short_tue: الثلاثاء
+        day_short_wed: الأربعاء
+        day_short_thu: الخميس
+        day_short_fri: الجمعة
+        
+        month_jan: يناير
+        month_feb: فبراير
+        month_mar: مارس
+        month_apr: أبريل
+        month_may: مايو
+        month_jun: يونيو
+        month_jul: يوليو
+        month_aug: أغسطس
+        month_sep: سبتمبر
+        month_oct: أكتوبر
+        month_nov: نوفمبر
+        month_dec: ديسمبر
+        
+        hmonth_muharram: محرم
+        hmonth_safar: صفر
+        hmonth_rabi_al_awwal: ربيع الأول
+        hmonth_rabi_al_thani: ربيع الثاني
+        hmonth_jumada_al_awwal: جمادي الأول
+        hmonth_jumada_al_thani: جمادي الثاني
+        hmonth_rajab: رجب
+        hmonth_shaaban: شعبان
+        hmonth_ramadan: رمضان
+        hmonth_shawwal: شوال
+        hmonth_dhu_al_qi_dah: ذو القعدة
+        hmonth_dhu_al_hijjah: ذو الحجة
+        
+        month_short_jan: يناير
+        month_short_feb: فبراير
+        month_short_mar: مارس
+        month_short_apr: أبريل
+        month_short_may: مايو
+        month_short_jun: يونيو
+        month_short_jul: يوليو
+        month_short_aug: أغسطس
+        month_short_sep: سبتمبر
+        month_short_oct: أكتوبر
+        month_short_nov: نوفمبر
+        month_short_dec: ديسمبر
+        
+        today: اليوم
+        month: شهر
+        week: أسبوع
+        day: يوم
+        
+        time_am: ص
+        time_pm: م
+
+        male: ذكر
+        female: أنثى
+
+        up: أعلى
+        down: أسفل
+        expand_all: تمديد الكل
+        collapse_all: إغلاق الكل
+        reload: إعادة تحميل
+        root: الجذر
+
+        width: العرض
+        height: الطول
+
+        created_at:    أنشيء في
+        modified_at:    آخر تعديل
+        from:    من
+        to:    إلى
+        by:    بواسطة
+        file: ملف
+        file_size: حجم الملف
+        duration: الزمن
+        duration_in_minutes: الزمن بالدقائق
+        subject: العنوان
+        details: التفاصيل
+        mobile: المحمول
+        phone_number: رقم الهاتف
+        resume: السيرة الذاتية
+
+    messages:
+        the_entry_has_been_added: تم إضافة العنصر
+        the_entry_has_been_updated: تم تعديل العنصر
+        the_entry_has_been_copied: تم نسخ العنصر
+        the_entry_has_been_deleted: تم حذف العنصر\العناصر
+        unable_to_find_the_entity: غير قادر على إيجاد العنصر "%entity%".
+        unable_to_delete_the_entity_because_used: غير قادر على حذف "%name%", ربما يكون العنصر مستخدماً في بيانات متعلقة
+        are_you_sure: هل أنت متأكد?
+        are_you_sure_delete: هل أنت متأكد من أنك تريد إلغاء العنصر\العناصر?
+        are_you_sure_activate: هل أنت متأكد من أنك تريد تفعيل العنصر\العناصر?
+        are_you_sure_deactivate: هل أنت متأكد من أنك تريد تعطيل العنصر\العناصر?
+        action_aborted: إلفاء العملية, لم يتم اختيار أي عنصر.
+        confirm_batch_message: هل أنت موافق على تنفيذ العملية المجمعة على العناصر المختارة؟
+        action_aborted_no_items_were_selected: تم إلغاء العملية, لم تقم باختيار أي عناصر.
+        no_sufficient_permissions: لا تملك الصلاحيات اللازمة لعرض هذه الصفحة
+        are_you_sure_delete_permanently: سيتم حذف هذه العناصر بشكل نهائي...هل أنت متأكد؟
+        this_items_will_be_deleted: سوف يتم حذف العناصر التالية
+        the_following_items_will_not_be_deleted: لن يمكن حذف العناصر التالية لأنه يوجد بيانات مرتبطة بها في أماكن أخرى
+        unable_to_save_the_entity_because_translations: حدث خطأ أثناء الحفظ...من فضلك تأكد من كل التبويبات
+        select_some_options: اختر بعض الخيارات
+        select_some_items_first: اختر بعض العناصر أولاً
+        access_denied: دخول غير مصرح
+        invalid_mimet_ypes: نوع الملف غير صحيح. الانواع المسموح بها هى %types%.
+        insufficient_acl_permissions:   لا تملك الصلاحيات اللازمة للقيام بالعملية المطلوبة
+        error_downloading_file:   خطأ أثناء تحميل الملف
+        please_waiting:  برجاء الإنتظار
+    log:
+        add_user: تم إضافة المستخدم رقم %entity_id%
+        edit_user: تم تعديل المستخدم رقم %entity_id%
+        delete_user: تم حذف المستخدم رقم %entity_id%
+        edit_profile: قام بتعديل ملفه الشخصي
+        user_has_been_deleted: المستخدم رقم %id%  الذي يحمل اسم المستخدم  "%username%" تم حذفه
+    config:
+        general_section: القسم العام
+        session_max_idle_time: الخروج اثناء الخمول بعد
+        admin_email: بريد المدير

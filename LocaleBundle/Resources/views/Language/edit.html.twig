@@ -1,0 +1,118 @@
+{% extends ':admin:base.html.twig' %}
+
+{% set sideMenuActiveSection = 'locale_management' %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">{{ 'admin.titles.home'|trans }}</a>
+            </li>
+            <li><a href="{{ path('locale_language_list') }}">{{ 'locale.menu.langs'|trans }}</a></li>
+            <li class="active">{{ 'locale.titles.language.edit_item'|trans }}</li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ 'locale.titles.language.edit_item'|trans }}</h1>
+</div>
+
+<div class="btn-group screenTopButtons">
+    <a class="btn btn-sm btn-inverse" href="{{ path('locale_language_list') }}">{{ 'admin.titles.list'|trans }}</a>
+    <a class="btn btn-sm btn-success" href="{{ path('locale_language_new') }}">{{ 'admin.titles.add'|trans }}</a>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        {{ form_errors(edit_form) }}
+        {{ form_start(edit_form, {'attr': {'novalidate':'true', 'class': 'form-horizontal', 'role':'form'}}) }}
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.name) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.name) }}
+                    {{ form_widget(edit_form.name) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.locale) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.locale) }}
+                    {{ form_widget(edit_form.locale) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.switchFrontEnd) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.switchFrontEnd) }}
+                    {{ form_widget(edit_form.switchFrontEnd) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.switchBackEnd) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.switchBackEnd) }}
+                    {{ form_widget(edit_form.switchBackEnd) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.translateContent) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.translateContent) }}
+                    {{ form_widget(edit_form.translateContent) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.photoFile) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.photoFile) }}
+                    {{ form_widget(edit_form.photoFile) }}
+                    <br>
+                    {% if entity.photo %}
+                        <div>
+                            <img src="{{ asset('upload/langs/'~entity.photo) }}" style="max-width: 100px;"/>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            {{ form_rest(edit_form) }}
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-2 col-md-10">
+                    <button class="btn btn-info" type="submit" name="submit">
+                        <i class="icon-ok bigger-110"></i> {{ 'admin.titles.edit'|trans }}
+                    </button>
+                </div>
+            </div>
+
+        {{ form_end(edit_form) }}
+    </div>
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,84 @@
+{% extends ':admin:base.html.twig' %}
+
+{% set sideMenuActiveSection = 'zekr' %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">الرئيسة</a>
+            </li>
+            <li><a href="{{ path('zekr_rewaya_list') }}">الروايات</a></li>
+            <li class="active">رواية</li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-header">
+        <h1>رواية</h1>
+    </div>
+
+    <div class="btn-group fly">
+        <a class="btn btn-sm btn-inverse" href="{{ path('zekr_rewaya_list') }}">القائمة</a>
+        <a class="btn btn-sm btn-success" href="{{ path('zekr_rewaya_new') }}">إضافة</a>
+        <a class="btn btn-sm btn-info" href="{{ path('zekr_rewaya_edit', { 'id': entity.id }) }}">تعديل</a>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+
+            <table class="table table-bordered table-striped">
+                <tbody>
+                <tr>
+                    <th width="100">Id</th>
+                    <td>{{ entity.id }}</td>
+
+                </tr>
+                <tr>
+                    <th>الإسم</th>
+                    <td>
+                        <table class="table table-bordered table-striped">
+                            <tbody>
+                            {% for language in adminHelper.getLanguages() %}
+                                <tr>
+                                    <th width="10%">{{ language.name }}</th>
+                                    <td>{{ entity.translate(language.locale).name }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>عدد الفديوهات</th>
+                    <td>{{ entity.numTopics }}</td>
+                </tr>
+                <tr>
+                    <th>المعرف</th>
+                    <td>{{ entity.slug }}</td>
+                </tr>
+                <tr>
+                    <th>مفعلة</th>
+                    <td>
+                        {% if entity.active %}
+                            <span class="icon-check"></span>
+                        {% else %}
+                            <span class=" icon-check-empty"></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}

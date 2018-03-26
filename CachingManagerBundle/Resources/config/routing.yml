@@ -1,0 +1,3 @@
+caching_manager_homepage:
+    path:     /
+    defaults: { _controller: CachingManagerBundle:Default:index }

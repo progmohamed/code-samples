@@ -1,0 +1,318 @@
+{% extends ':admin:base.html.twig' %}
+
+{% import "AdminBundle:Main:_helper.html.twig" as helper %}
+
+{% set sideMenuActiveSection = 'zekr' %}
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/admin/ace/assets/css/chosen.css') }}" />
+{% endblock %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">الرئيسة</a>
+            </li>
+            <li><a href="{{ path('zekr_video_list') }}">الفيديوهات</a></li>
+            <li class="active">تعديل فيديو</li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+<div class="page-header">
+    <h1>تعديل فيديو</h1>
+</div>
+
+<div class="btn-group fly">
+    <a class="btn btn-sm btn-inverse" href="{{ path('zekr_video_list') }}">القائمة</a>
+    <a class="btn btn-sm btn-success" href="{{ path('zekr_video_new') }}">إضافة</a>
+    <a class="btn btn-sm btn-info" href="{{ path('zekr_video_ftp_video') }}">إضافة من ال FTP</a>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"><h4>الفيديو</h4></label>
+
+            <div class="col-sm-10">
+                <div id="videoPlayer">Loading the player...</div>
+                <br/>
+            </div>
+        </div>
+        <div style="clear: both"></div>
+
+        {{ helper.showTranslatableFormErrorAlertIfAny(edit_form) }}
+
+
+        {{ form_errors(edit_form) }}
+        {{ form_start(edit_form, {'attr': {'novalidate':'true', 'class': 'form-horizontal', 'role':'form'}}) }}
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"><h4>اعتماد صورة للفيديو</h4></label>
+
+            <div class="col-sm-10">
+                <a class="btn btn-sm btn-success" id="thumbnail-time-btn" href="javascript:void(0)">اعتماد صورة</a>
+                <input type="text" id="thumbnail-time-text" name="thumbnailTimeText" readonly="readonly">
+                {{ form_errors(edit_form.thumbnailTime) }}
+                {{ form_widget(edit_form.thumbnailTime) }}
+                <br/>
+            </div>
+        </div>
+        <div style="clear: both"></div>
+
+        <div class="form-group">
+            <div style="clear: both"></div>
+            <div style="clear: both"></div>
+            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.plainSlug) }} <span class="label label-danger arrowed-right">كن حذرا</span></label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.plainSlug) }}
+                {{ form_widget(edit_form.plainSlug) }}
+            </div>
+        </div>
+        <div style="clear: both"></div>
+        <div class="tabbable">
+            <ul class="nav nav-tabs" id="myTab">
+                {% for language in adminHelper.getLanguages() %}
+                    <li{% if loop.first %} class="active"{% endif %}>
+                        <a data-toggle="tab" href="#tab{{ language.id }}">{{ language.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="tab-content">
+                {% for language in adminHelper.getLanguages() %}
+                    <div id="tab{{ language.id }}" class="tab-pane{% if loop.first %} in active{% endif %}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form['title_'~language.locale]) }} </label>
+                            <div class="col-sm-10">
+                                {{ form_errors(edit_form['title_'~language.locale]) }}
+                                {{ form_widget(edit_form['title_'~language.locale]) }}
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form['description_'~language.locale]) }} </label>
+                            <div class="col-sm-10">
+                                {{ form_errors(edit_form['description_'~language.locale]) }}
+                                {{ form_widget(edit_form['description_'~language.locale]) }}
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right"
+                            > {{ form_label(edit_form['display_'~language.locale]) }} </label>
+                            <div class="col-sm-10">
+                                <label>
+                                    {{ form_errors(edit_form['display_'~language.locale]) }}
+                                    {{ form_widget(edit_form['display_'~language.locale]) }}
+                                    <span class="lbl"></span>
+                                </label>
+
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="space-10"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.category) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.category) }}
+                {{ form_widget(edit_form.category) }}
+            </div>
+        </div>
+
+        <div class="space-10"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+                  > {{ form_label(edit_form.juz) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.juz) }}
+                {{ form_widget(edit_form.juz) }}
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+                  > {{ form_label(edit_form.hizb) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.hizb) }}
+                {{ form_widget(edit_form.hizb) }}
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+                  > {{ form_label(edit_form.surah) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.surah) }}
+                {{ form_widget(edit_form.surah) }}
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+                  > {{ form_label(edit_form.person) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.person) }}
+                {{ form_widget(edit_form.person) }}
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+                  > {{ form_label(edit_form.videoType) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.videoType) }}
+                {{ form_widget(edit_form.videoType) }}
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+                  > {{ form_label(edit_form.rewaya) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.rewaya) }}
+                {{ form_widget(edit_form.rewaya) }}
+            </div>
+        </div>
+
+        <div class="space-10"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.collection) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.collection) }}
+                {{ form_widget(edit_form.collection) }}
+            </div>
+        </div>
+
+        <div class="space-10"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+            > {{ form_label(edit_form.apiProject) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.apiProject) }}
+                {{ form_widget(edit_form.apiProject) }}
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+                  > {{ form_label(edit_form.active) }} </label>
+            <div class="col-sm-10">
+                <label>
+                    {{ form_errors(edit_form.active) }}
+                    {{ form_widget(edit_form.active) }}
+                    <span class="lbl"></span>
+                </label>
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+
+        {{ form_rest(edit_form) }}
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-2 col-md-10">
+                    <button class="btn btn-info" type="submit" name="submit">
+                        <i class="icon-ok bigger-110"></i>                      تعديل
+                    </button>
+                </div>
+            </div>
+
+        {{ form_end(edit_form) }}
+    </div>
+</div>
+
+{% endblock %}
+{% block bottomScripts %}
+
+
+    <script src="{{ asset('bundles/admin/ace/assets/js/chosen.jquery.min.js') }}"></script>
+
+    <script src="{{ asset('bundles/admin/js/jwplayer-7.10.5/jwplayer.js') }}"></script>
+    <script>jwplayer.key = "5c1omjHSXIRGjHtO0n3DHV1FM9EgrndWz6cVpg==";</script>
+
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $(".chosen-select").chosen();
+            $("#thumbnail-time-text").val(secondsAsTime({{ entity.thumbnailTime }}));
+            $("#thumbnail-time-btn").click(function () {
+                jwplayer("videoPlayer").pause(true);
+                $("#thumbnail-time-text").val(secondsAsTime(jwplayer("videoPlayer").getPosition()));
+                $("#video_thumbnailTime").val(Math.floor(jwplayer("videoPlayer").getPosition()));
+            })
+        });
+
+        {% if entity.tempVideoFile != null %}
+            var VideoSources = [{
+                file: "{{ app.request.getSchemeAndHttpHost() ~ asset('upload/video/'~entity.tempVideoFile) }}",
+            }];
+        {% else %}
+            var VideoSources = [
+                {
+                    file: "{{ app.request.getSchemeAndHttpHost() ~ asset('upload/video/'~entity.hdFile) }}",
+                    label: "HD",
+                },
+                {% if entity.sdFile != null %}
+                    {
+                        file: "{{ app.request.getSchemeAndHttpHost() ~ asset('upload/video/'~entity.sdFile) }}",
+                        label: "SD",
+                        default: true
+                    }
+                {% endif %}
+            ];
+
+        {% endif %}
+
+        jwplayer("videoPlayer").setup({
+            sources: VideoSources,
+            aspectratio: "16:9",
+            width: "35%",
+            image: "{{ app.request.getSchemeAndHttpHost() ~ asset('upload/video/video_thumbnail/'~entity.getThumbnailFile) }}"
+        });
+
+        function secondsAsTime(seconds) {
+            var hours = Math.floor(seconds / 3600);
+            seconds -= hours * 3600;
+            var minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            function pad(n) {
+                return (n < 10) ? '0'+ n : n;
+            }
+            return pad(hours) +':'+ pad(minutes) +':'+ pad(seconds);
+        }
+
+
+    </script>
+{% endblock %}

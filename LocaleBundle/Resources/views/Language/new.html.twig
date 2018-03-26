@@ -1,0 +1,119 @@
+{% extends ':admin:base.html.twig' %}
+
+{% set sideMenuActiveSection = 'locale_management' %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">{{ 'admin.titles.home'|trans }}</a>
+            </li>
+            <li><a href="{{ path('locale_language_list') }}">{{ 'locale.menu.langs'|trans }}</a></li>
+            <li class="active">{{ 'locale.titles.language.new_item'|trans }}</li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ 'locale.titles.language.new_item'|trans }}</h1>
+</div>
+
+<div class="btn-group screenTopButtons">
+    <a class="btn btn-sm btn-inverse" href="{{ path('locale_language_list') }}">{{ 'admin.titles.list'|trans }}</a>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        {{ form_errors(form) }}
+        {{ form_start(form, {'attr': {'novalidate':'true', 'class': 'form-horizontal', 'role':'form'}}) }}
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.name) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.name) }}
+                    {{ form_widget(form.name) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.locale) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.locale) }}
+                    {{ form_widget(form.locale) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.direction) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.direction) }}
+                    {{ form_widget(form.direction) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.switchFrontEnd) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.switchFrontEnd) }}
+                    {{ form_widget(form.switchFrontEnd) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.switchBackEnd) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.switchBackEnd) }}
+                    {{ form_widget(form.switchBackEnd) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.translateContent) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.translateContent) }}
+                    {{ form_widget(form.translateContent) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.photoFile) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.photoFile) }}
+                    {{ form_widget(form.photoFile) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+
+            {{ form_rest(form) }}
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-2 col-md-10">
+                    <button class="btn btn-info" type="submit" name="submit">
+                        <i class="icon-ok bigger-110"></i> {{ 'admin.titles.add'|trans }}
+                    </button>
+                </div>
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+{% endblock %}

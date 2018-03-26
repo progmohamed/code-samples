@@ -1,0 +1,47 @@
+locale:
+    menu:
+        locale: Localization
+        countries: Countries
+        langs: Languages
+        dialect: Dialect
+    hints:
+        countries: Here you will find control of the countries you can add, delete or modify any country you want
+        langs: From here you can control the languages of a Zekr site, you can add or delete a language and control how it appears to the user
+        dialect: From here you can control the dialect of a Zekr site, you can add or delete a dialect and control how it appears to the user
+    log:
+        add_country: Country with id number %entity_id% has been added
+        edit_country: Country with id number %entity_id% has been edited
+        delete_country: Country with id number %entity_id% has been deleted
+
+
+        add_language: Language with id number %entity_id% has been added
+        edit_language: Language with id number %entity_id% has been edited
+        delete_language: Language with id number %entity_id% has been deleted
+
+
+        add_dialect: Dialect with id number %entity_id% has been added
+        edit_dialect: Dialect with id number %entity_id% has been edited
+        delete_dialect: Dialect with id number %entity_id% has been deleted
+    titles:
+        country:
+            new_item: Add new Country
+            edit_item: Edit Country
+            show_item: Show Country
+        dialect:
+            new_item: Add new Dialect
+            edit_item: Edit Dialect
+            show_item: Show Dialect
+            dialect_name: Dialect Name
+        language:
+            new_item: Add new Language
+            edit_item: Edit Language
+            show_item: Show Language
+            lang_name: Language Name
+            lang_code: Language Code
+            lang_direction: Language Direction
+            lang_rtl: Right to Left
+            lang_ltr: Left to Right
+            lang_flag: Language Flag
+            lang_switch_frontEnd: Switch Language in FrontEnd
+            lang_switch_backEnd: Switch Language in BacktEnd
+            lang_translate_content: Translate Language Content

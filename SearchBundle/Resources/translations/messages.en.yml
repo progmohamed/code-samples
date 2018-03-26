@@ -1,0 +1,11 @@
+search:
+    menu:
+        search: Search
+        history: Search Records
+    hints:
+        search: Here you will find control of Search
+        history: From here you can review search records
+
+    history:
+        string: String
+        sum: Sum

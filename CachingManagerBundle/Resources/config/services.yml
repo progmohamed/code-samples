@@ -1,0 +1,4 @@
+services:
+    cachingmanager.service:
+        class: CachingManagerBundle\Service\CachingManagerService\CachingManagerService
+        arguments: ["@service_container"]

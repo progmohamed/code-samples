@@ -1,0 +1,69 @@
+services:
+    admin.twig_extension:
+        class: AdminBundle\Extension\AdminTwigExtension
+        arguments: [ '@service_container', '@security.authorization_checker' ]
+        tags:
+          - { name: twig.extension }
+
+    admin.HijriDate:
+        class: AdminBundle\Classes\HijriDate
+        arguments: ["@service_container"]
+
+    admin.exception_handler:
+        class: AdminBundle\EventListener\ExceptionHandler
+        arguments: ["@service_container"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    admin.security_expression_language_provider:
+            class: AdminBundle\ExpressionLanguage\ExpressionLanguageProvider
+            tags:
+                - { name: security.expression_language_provider }
+
+    admin.voter:
+        class: AdminBundle\Security\AdminVoter
+        arguments: [ "@doctrine.orm.entity_manager" ]
+        tags:
+            - { name: security.voter }
+        public: false
+
+    admin.hard_delete_helper:
+        class: AdminBundle\Service\HardDeleteHelper
+        calls:
+            - [setContainer, ['@service_container']]
+
+    admin.datafixturescollector.service:
+        class: AdminBundle\Service\DataFixturesCollectorService
+        calls:
+            - [setContainer, ['@service_container']]
+
+    admin.backend.menu.service:
+        class: AdminBundle\Service\BackendMenuService
+        calls:
+            - [setContainer, ['@service_container']]
+
+    admin.entity.subscriber:
+        class: AdminBundle\Subscriber\EntitySubscriber
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+
+    admin.service:
+        class: AdminBundle\Service\AdminService\AdminService
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - { name: locale.service }
+
+    admin.session_handler:
+        class:  AdminBundle\Classes\SessionIdleHandler
+        arguments: ["@session", "@security.token_storage", "@router", "@config.service"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    admin.backend.menu:
+        class:  AdminBundle\DataFixtures\ORM\LoadMenu
+        tags:
+            - { name: backend.menu.fixture }

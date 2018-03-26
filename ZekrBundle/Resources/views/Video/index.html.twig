@@ -1,0 +1,392 @@
+{% extends ':admin:base.html.twig' %}
+{% import "AdminBundle:Main:_helper.html.twig" as helper %}
+
+{% set sideMenuActiveSection = 'zekr' %}
+{% block head %}
+    {{ parent()  }}
+    <link rel="stylesheet" href="{{ asset('bundles/admin/ace/assets/css/chosen.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('bundles/zekr/js/bootstrap3-editable/css/bootstrap-editable.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('bundles/zekr/js/bootstrap3-editable/inputs-ext/custom_text/custom_text.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('bundles/zekr/js/select2-3.4.4/select2.css') }}" type="text/css" />
+    <style>
+        .editable-buttons{
+            margin-left: auto !important;
+            margin-right: 1px !important;;
+            display: block !important;;
+            margin-top: 15px !important;;
+            text-align: center !important;;
+        }
+        .popover-title{
+            text-align: center !important;
+        }
+    </style>
+{% endblock %}
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">الرئيسة</a>
+            </li>
+            <li class="active">الفيديوهات</li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block gridFilter %}
+    {% form_theme formFilter ':admin:filterFormTheme.html.twig' %}
+    {{ form_errors(formFilter) }}
+    <form id="gridFilter" novalidate action="{{formFilter.vars.action}}" method="post">
+        {{ form_rest(formFilter) }}
+        <br>
+        <button name="submit" class="btn btn-sm btn-primary" type="submit">بحث</button>
+        <button name="reset" class="btn btn-sm" type="reset">مسح</button>
+    </form>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h1>الفيديوهات</h1>
+    </div>
+    <div class="btn-group fly">
+        <a class="btn btn-sm btn-success" href="{{ path('zekr_video_new') }}">إضافة</a>
+        <a class="btn btn-sm btn-info" href="{{ path('zekr_video_ftp_video') }}">إضافة من ال FTP</a>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <form action="{{ path('zekr_video_batch') }}" method="post" class="gridForm">
+                <table id="sample-table-1" class="grid-table table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th class="center" width="35">
+                            <label>
+                                <input type="checkbox" class="ace" />
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        <th>{{ knp_pagination_sortable(entities, 'ID', 'v.id') }}</th>
+                        <th>{{ knp_pagination_sortable(entities, 'العنوان', 'vt.title') }}</th>
+                        <th>الصورة</th>
+                        <th>{{ knp_pagination_sortable(entities, 'التصنيف الموضوعي', 'vc.id') }}</th>
+                        <th>{{ knp_pagination_sortable(entities, 'السورة', 'vs.id') }}</th>
+                        <th>{{ knp_pagination_sortable(entities, 'نوع الفيديو', 'vtt.id') }}</th>
+                        <th>{{ knp_pagination_sortable(entities, 'المدة', 'v.duration') }}</th>
+                        <th>{{ knp_pagination_sortable(entities, 'عدد المشاهدات', 'v.views') }}</th>
+                        <th>{{ knp_pagination_sortable(entities, 'عدد التنزيلات', 'v.downloads') }}</th>
+                        <th>{{ knp_pagination_sortable(entities, 'حالة الملف', 'v.conversionStatus') }}</th>
+                        <th>{{ knp_pagination_sortable(entities, 'مفعلة', 'v.active') }}</th>
+                        <th>فيديو مختار</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for entity in entities %}
+
+                        <tr>
+                            <td class="center" width="35">
+                                <label>
+                                    <input type="checkbox" class="ace" value="{{ entity.id }}" name="idx[]" />
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+                            <td>{{ entity.id }}</td>
+                            <td>
+                                <a href="#" class="title" data-type="customText" data-title="ادخل العنوان" data-name="title" data-url="{{ path('zekr_video_inline_edit') }}" data-value="{ {% for translation in entity.translations %} title_{{ translation.locale }}:'{{ translation.title }}', {% endfor %} }" data-pk="{{ entity.id }}">{{ entity.translate().title }}</a>
+                            </td>
+                            <td style="padding:2px !important;">
+                                <a class="fancybox" rel="gallery" href="{{ asset('upload/video/video_thumbnail/'~entity.getThumbnailFile) }}" >
+                                    <img class="lazy" data-src="{{ entity.getThumbnailFile | imagine_filter('video_thumbnail_70')  }}" />
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" class="category" data-type="select2" data-pk="{{ entity.id }}" data-value="[{% for category in entity.category %}{{ category.id }},{% endfor %}]" data-url="{{ path('zekr_video_inline_edit') }}" data-name="category" data-title="اختر التصنيفات الموضوعية"></a>
+                            </td>
+                            <td>
+                                <a href="#" class="classifications" data-type="customText" data-title="ادخل السورة" data-value="{surah:[{% for surah in entity.surah %}{{ surah.id }},{% endfor %}], hizb:[{% for hizb in entity.hizb %}{{ hizb.id }},{% endfor %}], juz:[{% for juz in entity.juz %}{{ juz.id }},{% endfor %}] }" data-name="classifications" data-url="{{ path('zekr_video_inline_edit') }}"  data-pk="{{ entity.id }}"></a>
+                            </td>
+                            <td>
+                                <a href="#" class="video_type" data-type="select2" data-pk="{{ entity.id }}" data-value="[{% for type in entity.videoType %}{{ type.id }},{% endfor %}]" data-url="{{ path('zekr_video_inline_edit') }}" data-name="video_type" data-title="اختر نوع الفيديو"></a>
+                            </td>
+                            <td>{{ entity.duration|duration }}</td>
+                            <td>{{ entity.views }}</td>
+                            <td>{{ entity.downloads }}</td>
+                            <td>
+                                {% if entity.conversion %}
+                                    {% if constant('STATUS_WAITING', entity) == entity.conversionStatus %}
+                                        <span class="label label-sm label-info">بإنتظار دورها للتحويل</span>
+                                    {% elseif constant('STATUS_IN_PROGRESS', entity) == entity.conversionStatus %}
+                                        <span class="label label-sm label-warning">جاري التحويل الان</span>
+                                    {% elseif constant('STATUS_DONE', entity) == entity.conversionStatus %}
+                                        <span class="label label-sm label-success">تم التحويل</span>
+                                    {% elseif constant('STATUS_FILES_MISSING', entity) == entity.conversionStatus %}
+                                        <span class="label label-sm label-danger">الملف مفقود</span>
+                                    {% endif %}
+                                {% else %}
+                                    {% if constant('STATUS_WAITING', entity) == entity.conversionStatus %}
+                                        <span class="label label-sm label-info">بإنتظار دورها لتوليد ملف الصوت</span>
+                                    {% elseif constant('STATUS_IN_PROGRESS', entity) == entity.conversionStatus %}
+                                        <span class="label label-sm label-warning">جاري توليد ملف الصوت الان</span>
+                                    {% elseif constant('STATUS_DONE', entity) == entity.conversionStatus %}
+                                        <span class="label label-sm label-success">تم توليد ملف الصوت</span>
+                                    {% elseif constant('STATUS_FILES_MISSING', entity) == entity.conversionStatus %}
+                                        <span class="label label-sm label-danger">الملف مفقود</span>
+                                    {% endif %}
+
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if entity.active %}
+                                    <span class="icon-check"></span>
+                                {% else %}
+                                    <span class=" icon-check-empty"></span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if entity.selected %}
+                                    <button type="button" class="selectedVideo btn btn-xs btn-danger" video-id="{{ entity.id }}" mode="remove">حذف</button>
+                                {% else %}
+                                    <button type="button" class="selectedVideo btn btn-xs btn-success" video-id="{{ entity.id }}" mode="add">إضافة</button>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+                                    <a class="blue" href="{{ path('zekr_video_show', { 'id': entity.id }) }}">
+                                        <i class="icon-zoom-in bigger-130"></i>
+                                    </a>
+
+                                    <a class="green" href="{{ path('zekr_video_edit', { 'id': entity.id }) }}">
+                                        <i class="icon-pencil bigger-130"></i>
+                                    </a>
+
+                                    <a class="deleteRow red" href="#" url="{{ path('zekr_video_delete', { 'id': entity.id, 'redirect': app.request.uri|base64_encode }) }}">
+                                        <i class="icon-trash bigger-130"></i>
+                                    </a>
+                                </div>
+
+                                <div class="visible-xs visible-sm hidden-md hidden-lg">
+                                    <div class="inline position-relative">
+                                        <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown">
+                                            <i class="icon-caret-down icon-only bigger-120"></i>
+                                        </button>
+
+                                        <ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
+                                            <li>
+                                                <a href="{{ path('zekr_video_show', { 'id': entity.id }) }}" class="tooltip-info" data-rel="tooltip" title="View">
+                                                    <span class="blue">
+                                                        <i class="icon-zoom-in bigger-120"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="{{ path('zekr_video_edit', { 'id': entity.id }) }}" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                    <span class="green">
+                                                        <i class="icon-edit bigger-120"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="#" url="{{ path('zekr_video_delete', { 'id': entity.id, 'redirect': app.request.uri|base64_encode }) }}" class="deleteRow tooltip-error" data-rel="tooltip" title="Delete">
+                                                    <span class="red">
+                                                        <i class="icon-trash bigger-120"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="form-inline">
+                    <label for="all_elements" class="checkbox"></label>
+                    <select name="action">
+                        <option value="delete">حذف</option>
+                        <option value="activate">تفعيل</option>
+                        <option value="deactivate">تعطيل</option>
+                    </select>
+                    <input type="submit" value="Ok" class="btn btn-sm btn-primary">
+                </div>
+                </form>
+            </div><!-- /.table-responsive -->
+        </div><!-- /span -->
+        {{ knp_pagination_render(entities) }}
+
+    </div><!-- /row -->
+
+{% endblock %}
+
+{% block bottomScripts %}
+    {{ helper.gridJavaScripts(path('zekr_video_list')) }}
+    {% include ':admin:_fancyboxIncludes.html.twig' %}
+    <script src="{{ asset('bundles/zekr/js/bootstrap3-editable/js/bootstrap-editable.js') }}"></script>
+    <script src="{{ asset('bundles/zekr/js/bootstrap3-editable/inputs-ext/custom_text/custom_text.js') }}"></script>
+    <script src="{{ asset('bundles/zekr/js/lazy-load/jquery.lazy.min.js') }}"></script>
+
+
+    <script src="{{ asset('bundles/zekr/js/select2-3.4.4/select2.min.js') }}"></script>
+    <script src="{{ asset('bundles/zekr/js/select2-3.4.4/select2_locale_ar.js') }}"></script>
+    <script type="text/javascript">
+        jQuery(function($) {
+            $('.lazy').Lazy();
+            $(".fancybox").fancybox({
+                openEffect	: 'none',
+                closeEffect	: 'none',
+                nextEffect : 'none',
+                prevEffect : 'none',
+                helpers: {
+                    overlay: {
+                        locked: false
+                    }
+                }
+            });
+
+            $('.selectedVideo').click(function () {
+                var self = this;
+                var id = $(this).attr('video-id');
+                var mode = $(this).attr('mode');
+                $(this).prop('disabled', true);
+                $.ajax({
+                    method: "POST",
+                    url: '{{ path("zekr_add_remove_selected_video") }}',
+                    dataType: "json",
+                    data: {
+                        'video': id,
+                        'mode': mode
+                    }
+                }).done(function (json) {
+                    if (json.success) {
+                        if ('add' == mode) {
+                            alert('تم إضافة الفيديو  بنجاح إلى الفيديوهات المختارة');
+                            $(self).attr('mode', 'remove').html('حذف').removeClass('btn-success').addClass('btn-danger');
+                        } else {
+                            alert('تم حذف الفيديو بنجاح من الفيديوهات المختارة');
+                            $(self).attr('mode', 'add').html('إضافة').removeClass('btn-danger').addClass('btn-success');
+                        }
+                    } else {
+                        alert(json.message);
+                    }
+                }).always(function () {
+                    $(self).prop('disabled', false);
+                }).fail(function () {
+                });
+            });
+
+
+
+
+
+            //inline edit
+
+            $.fn.editable.defaults.mode = '{{ configService.getValue('inlineEditingMode', 'inline') }}';
+            $('.category').editable({
+                inputclass: 'input-large',
+                source: [
+                    {% for category in categories %}
+                    {id: '{{ category.id }}', text: '{{ category.translate().name }}'},
+                    {% endfor %}
+                ],
+                select2: {
+                    multiple: true,
+                    tokenSeparators: [",", " "]
+                },
+                success: function (response, newValue) {
+                }
+            });
+            $('.title').editable({
+                tpl: '<div>' +
+                '<div class="tabbable">' +
+                '<ul class="nav nav-tabs" id="myTab">' +
+                {% for language in adminHelper.getLanguages() %}
+                '<li{% if language.locale == app.request.locale %} class="active"{% endif %}><a data-toggle="tab" href="#tab{{ language.id }}">{{ language.name }}</a></li>' +
+                {% endfor %}
+                '</ul>' +
+                '<div class="tab-content">' +
+                {% for language in adminHelper.getLanguages() %}
+                '<div id="tab{{ language.id }}" class="tab-pane{% if language.locale == app.request.locale %} in active{% endif %}">' +
+                '<input type="text" required="required" class="custom-xeditable" name="title_{{ language.locale }}" >' +
+
+                '</div>' +
+                {% endfor %}
+                '</div>' +
+                '</div>' +
+                '</div>',
+                mainField: 'title_{{ app.request.locale }}',
+                success: function (response, newValue) {
+                }
+            });
+            $('.classifications').editable({
+                tpl: '<div class="classifications-fields">' +
+                '<div class="form-group"><label class="col-sm-2 control-label no-padding-right">السورة</label> <div class="col-sm-10"><select name="surah" multiple="multiple" data-placeholder="اختر السور" class="custom-xeditable input-large surah"></select></div> </div><div class="space-4"></div>' +
+                '<div class="form-group"><label class="col-sm-2 control-label no-padding-right">الحزب</label> <div class="col-sm-10"><select name="hizb" multiple="multiple" data-placeholder="اختر الاحزاب" class="custom-xeditable input-large hizb"></select></div> </div><div class="space-4"></div>' +
+                '<div class="form-group"><label class="col-sm-2 control-label no-padding-right">الجزء&nbsp;</label> <div class="col-sm-10"><select name="juz" multiple="multiple" data-placeholder="اختر الاجزاء" class="custom-xeditable input-large juz"></select></div> </div><div class="space-4"></div>' +
+                '</div>',
+                mainField: 'surah',
+                source: {
+                    'surah': [
+                        {% for surah in surahs %}
+                        {value: '{{ surah.id }}', text: '{{ surah.translate().name }}'},
+                        {% endfor %}
+                    ],
+                    'hizb': [
+                        {% for hizb in hizbs %}
+                        {value: '{{ hizb.id }}', text: '{{ hizb.translate().name }}'},
+                        {% endfor %}
+                    ],
+                    'juz': [
+                        {% for juz in juzs %}
+                        {value: '{{ juz.id }}', text: '{{ juz.translate().name }}'},
+                        {% endfor %}
+                    ]
+                },
+                success: function (response, newValue) {
+                }
+            });
+
+            $('.video_type').editable({
+                inputclass: 'input-large',
+                source: [
+                    {% for videoType in videoTypes %}
+                    {id: '{{ videoType.id }}', text: '{{ videoType.translate().name }}'},
+                    {% endfor %}
+                ],
+                select2: {
+                    multiple: true,
+                    tokenSeparators: [",", " "]
+                },
+                success: function (response, newValue) {
+                    console.log(response);
+                }
+            });
+
+
+            var arr = [];
+            {% for surah in surahs %}
+            arr[{{ surah.id }}] = {firstJuz: {{ surah.firstJuz().id }}, firstHizb: {{ surah.firstHizb().id }}};
+            {% endfor %}
+
+            $(document.body).on("change",".surah",function(){
+                var parent = $(this).parent().parent().parent();
+                $("option:selected", this).each(function() {
+                    parent.find('.juz>option[value="'+arr[$(this).val()].firstJuz+'"]').prop('selected', true);
+                    parent.find('.hizb>option[value="'+arr[$(this).val()].firstHizb+'"]').prop('selected', true);
+
+                });
+                parent.find("select").select2("destroy").select2();
+            });
+        });
+
+    </script>
+
+{% endblock %}

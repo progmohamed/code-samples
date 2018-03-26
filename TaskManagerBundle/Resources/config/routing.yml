@@ -1,0 +1,3 @@
+task_manager_homepage:
+    path:     /
+    defaults: { _controller: TaskManagerBundle:Default:index }

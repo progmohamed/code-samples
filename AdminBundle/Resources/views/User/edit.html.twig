@@ -1,0 +1,231 @@
+{% extends ':admin:base.html.twig' %}
+
+{% set sideMenuActiveSection = 'admin_user_management' %}
+
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/admin/ace/assets/css/chosen.css') }}" />
+{% endblock %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">{{ 'admin.titles.home'|trans }}</a>
+            </li>
+            <li><a href="{{ path('admin_user') }}">{{ 'admin.menu.users'|trans }}</a></li>
+            <li class="active">{{ 'admin.titles.edit_item'|trans }}</li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ 'admin.titles.edit_item'|trans }}</h1>
+</div>
+
+<div class="btn-group screenTopButtons">
+    <a class="btn btn-sm btn-inverse" href="{{ path('admin_user') }}">{{ 'admin.titles.list'|trans }}</a>
+    <a class="btn btn-sm btn-success" href="{{ path('admin_user_new') }}">{{ 'admin.titles.add'|trans }}</a>
+    <a class="btn btn-sm btn-info" href="{{ path('admin_user_show', { 'id': entity.id }) }}">{{ 'admin.titles.show'|trans }}</a>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        {{ form_errors(edit_form) }}
+        {{ form_start(edit_form, {'attr': {'novalidate':'true', 'class': 'form-horizontal', 'role':'form'}}) }}
+            
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.realName) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.realName) }}
+                    {{ form_widget(edit_form.realName) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.email) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.email) }}
+                    {{ form_widget(edit_form.email) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.countryId) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.countryId) }}
+                    {{ form_widget(edit_form.countryId) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.username) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.username) }}
+                    {{ form_widget(edit_form.username) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.dateOfBirth) }} </label>
+                <div class="col-sm-10 cellDate">
+                    {{ form_errors(edit_form.dateOfBirth) }}
+                    {{ form_widget(edit_form.dateOfBirth) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.phoneNumber) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.phoneNumber) }}
+                    {{ form_widget(edit_form.phoneNumber) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.sex) }} </label>
+                <div class="col-sm-10 cellRadio">
+                    {{ form_errors(edit_form.sex) }}
+                    {{ form_widget(edit_form.sex) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.personalWebsite) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.personalWebsite) }}
+                    {{ form_widget(edit_form.personalWebsite) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.resume) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.resume) }}
+                    {{ form_widget(edit_form.resume) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.plainPassword.first) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.plainPassword.first) }}
+                    {{ form_widget(edit_form.plainPassword.first) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.plainPassword.second) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.plainPassword.second) }}
+                    {{ form_widget(edit_form.plainPassword.second) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            {% if app.user.id != entity.id %}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.groups) }} </label>
+                    <div class="col-sm-10">
+                        {{ form_errors(edit_form.groups) }}
+                        {{ form_widget(edit_form.groups, { 'attr': {'class': 'chosen-select'} } ) }}
+                    </div>
+                </div>
+                <div class="space-4"></div>
+            {% endif %}
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.photoFile) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.photoFile) }}
+                    {{ form_widget(edit_form.photoFile) }}
+                    <br>
+                    {% if entity.photo %}
+                        <div>
+                            <a class="fancybox" rel="gallery" href="{{ asset(entity.getPhotoWebPath()) }}" title="">
+                                <img src="{{ asset(entity.getPhotoWebPath()) }}" style="max-width: 100px;"/></a>
+                        </div>
+                    {% else %}
+                        <img src="{{ asset('bundles/admin/images/user.png') }}" />
+                    {% endif %}
+                </div>
+            </div>
+            <div class="space-4"></div>
+
+            <div class="form-group {% if not entity.photo %}hidden{% endif %}">
+                <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form.removePhoto) }} </label>
+                <div class="col-sm-10">
+                    {{ form_errors(edit_form.removePhoto) }}
+                    {{ form_widget(edit_form.removePhoto) }}
+                </div>
+            </div>
+            <div class="space-4"></div>
+            
+            {% if edit_form.enabled is defined %}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label no-padding-right"
+                    > {{ form_label(edit_form.enabled) }} </label>
+                    <div class="col-sm-10">
+                        <label>
+                            {{ form_errors(edit_form.enabled) }}
+                            {{ form_widget(edit_form.enabled, { 'attr': {'class': 'ace ace-switch ace-switch-5'} } ) }}
+                            <span class="lbl"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+            {% endif %}
+
+            {{ form_rest(edit_form) }}
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-2 col-md-10">
+                    <button class="btn btn-info" type="submit" name="submit">
+                        <i class="icon-ok bigger-110"></i>{{ 'admin.titles.edit'|trans }}
+                    </button>
+                </div>
+            </div>
+
+        {{ form_end(edit_form) }}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block bottomScripts %}
+    {% include ':admin:_fancyboxIncludes.html.twig' %}
+    <script src="{{ asset('bundles/admin/ace/assets/js/chosen.jquery.min.js') }}"></script>
+    <script type="text/javascript">
+        $(".chosen-select").chosen({width: "200px"});
+        jQuery(function($) {
+            $(".fancybox").fancybox({
+                openEffect	: 'none',
+                closeEffect	: 'none',
+                nextEffect : 'none',
+                prevEffect : 'none',
+                helpers: {
+                    overlay: {
+                        locked: false
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,33 @@
+services:
+
+    search.service:
+        class: ZekrBundle\Service\Search\Search
+        arguments: ["@service_container"]
+
+    zekr.datafixtures.service:
+        class: ZekrBundle\Service\DataFixturesService
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - { name: datafixtures.service, priority: 2 }
+
+    zekr.service:
+        class: ZekrBundle\Service\ZekrService
+        calls:
+            - [setContainer, ['@service_container']]
+
+    zekr.solrconfig.service:
+        class: ZekrBundle\Service\SolrConfigService
+        arguments: ["@service_container"]
+
+    zekr.entity.subscriber:
+        class: ZekrBundle\Subscriber\EntitySubscriber
+        arguments: ["@service_container"]
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+
+    zekr.locale.subscriber:
+        class: ZekrBundle\Subscriber\LocaleSubscriber
+        arguments: ["@service_container"]
+        tags:
+         - { name: kernel.event_subscriber }

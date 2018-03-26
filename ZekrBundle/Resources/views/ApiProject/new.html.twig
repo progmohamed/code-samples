@@ -1,0 +1,83 @@
+{% extends ':admin:base.html.twig' %}
+
+{% set sideMenuActiveSection = 'zekr' %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">الرئيسة</a>
+            </li>
+            <li><a href="{{ path('zekr_api_project_list') }}">مشاريع ال API</a></li>
+            <li class="active">إضافة مشروع API</li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>إضافة مشروع API</h1>
+</div>
+
+<div class="btn-group fly">
+    <a class="btn btn-sm btn-inverse" href="{{ path('zekr_api_project_list') }}">القائمة</a>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        {{ form_errors(form) }}
+        {{ form_start(form, {'attr': {'novalidate':'true', 'class': 'form-horizontal', 'role':'form'}}) }}
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.plainSlug) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(form.plainSlug) }}
+                {{ form_widget(form.plainSlug) }}
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.name) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(form.name) }}
+                {{ form_widget(form.name) }}
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.active) }} </label>
+            <div class="col-sm-10">
+                <label>
+                    {{ form_errors(form.active) }}
+                    {{ form_widget(form.active) }}
+                    <span class="lbl"></span>
+                </label>
+
+            </div>
+        </div>
+            <div class="space-4"></div>
+
+            {{ form_rest(form) }}
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-2 col-md-10">
+                    <button class="btn btn-info" type="submit" name="submit">
+                        <i class="icon-ok bigger-110"></i>                       إضافة
+                    </button>
+                </div>
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+{% endblock %}
+

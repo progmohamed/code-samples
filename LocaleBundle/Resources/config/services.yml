@@ -1,0 +1,18 @@
+services:
+
+    locale.entity.subscriber:
+        class: LocaleBundle\Subscriber\EntitySubscriber
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+
+    locale.service:
+        class: LocaleBundle\Service\LocaleService\LocaleService
+        calls:
+            - [setContainer, ['@service_container']]
+
+    locale.backend.menu:
+        class:  LocaleBundle\DataFixtures\ORM\LoadMenu
+        tags:
+            - { name: backend.menu.fixture }

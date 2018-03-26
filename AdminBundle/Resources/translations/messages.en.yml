@@ -1,0 +1,235 @@
+app:
+    title: Smartlib V2 Panel
+admin:
+    menu:
+        home_page: Home Page
+        result_filter: Result Filter
+        user_management: User Management
+        users: Users
+    hints:
+        user_management: This section is for the general control panel
+        users: From here you can manage users to modify their profiles and passwords and assign permissions to them
+    user:
+        profile: Profile
+        log_out: Log Out
+        welcome: Welcome
+    titles:
+        new_item: Add new user
+        edit_item: Edit User
+        show_item: Show User
+        edit_profile: Edit User Profile
+        show_profile: Show User Profile
+        after: After
+        before: Before
+        exit: Exit
+        done: Done
+        back_end_title: Conference & Project Management
+        home: Home
+        lang: Language
+        main_menu_title_mobile: MENU
+        dashboard: Dashboard
+        welcome_user: <small>Welcome</small>, "%username%"
+        logout : Logout
+        profile: Profile
+        error_happened: Error Happened
+        name: Name
+        username: Username
+        user: User
+        real_name: Real Name
+        registration_dateTime: Registration date
+        photo: Photo
+        remove_photo: Remove Photo
+        website: Website
+        groups: Groups
+        date_of_birth: Date of Birth
+        password: Password
+        confirm_password: Confirm Password
+        title: Title
+        slug: Slug
+        slug_danger: Be careful
+        email: E-mail
+        gender: Gender
+        abstract: Abstract
+        description: Description
+        body: Body
+        views: Views
+        add: Add
+        edit: Edit
+        save: Save
+        list: List All
+        show: Show
+        view: View
+        enabled: Enabled
+        delete: Delete
+        active: Active
+        not_active: Not Active
+        activate: Activate
+        deactivate: Deactivate
+        filter: Filter
+        reset: Reset
+        search: Search
+        clear: Clear
+        close: Close
+        send: Send
+        select: Select
+        selected: Selected
+        not_selected: Not Selected
+        role: Role
+        select_file: Select file
+        start_uploading: Start Uploading
+        upload_file: Upload File
+        download: Download
+        choose: Choose
+        page: Page
+        pages: Pages
+        id: Id
+        ok: Ok
+        or: Or
+        cancel: Cancel
+        yes: Yes
+        no: No
+        yes_execute: Yes, execute
+        confirm_batch_action: Confirm batch action
+        batch_operation: Batch Operation
+        back: Back
+        city: City
+        country: Country
+        without: Without
+        no_data: No Data
+        date_time: Date/Time
+        date: Date
+        date_to: Date - to
+        date_from: Date - from
+        created_at: Created Date
+        updated_at: Updated Date
+        time: Time
+        export: Export
+        pagination_results: "Results: %results% - Page %page% of %pages%"
+        
+        day_sat: Saturday
+        day_sun: Sunday
+        day_mon: Monday
+        day_tue: Tuesday
+        day_wed: Wednesday
+        day_thu: Thursday
+        day_fri: Friday
+        
+        day_short_sat: Sat
+        day_short_sun: Sun
+        day_short_mon: Mon
+        day_short_tue: Tue
+        day_short_wed: Wed
+        day_short_thu: Thu
+        day_short_fri: Fri
+        
+        month_jan: January
+        month_feb: February
+        month_mar: March
+        month_apr: April
+        month_may: May
+        month_jun: June
+        month_jul: July
+        month_aug: August
+        month_sep: September
+        month_oct: October
+        month_nov: November
+        month_dec: December
+        
+        hmonth_muharram: muharram
+        hmonth_safar: safar
+        hmonth_rabi_al_awwal: rabi_al_awwal
+        hmonth_rabi_al_thani: rabi_al_thani
+        hmonth_jumada_al_awwal: jumada_al_awwal
+        hmonth_jumada_al_thani: jumada_al_thani
+        hmonth_rajab: rajab
+        hmonth_shaaban: shaaban
+        hmonth_ramadan: ramadan
+        hmonth_shawwal: shawwal
+        hmonth_dhu_al_qi_dah: dhu_al_qi_dah
+        hmonth_dhu_al_hijjah: dhu_al_hijjah
+        
+        month_short_jan: Jan
+        month_short_feb: Feb
+        month_short_mar: Mar
+        month_short_apr: Apr
+        month_short_may: May
+        month_short_jun: Jun
+        month_short_jul: Jul
+        month_short_aug: Aug
+        month_short_sep: Sep
+        month_short_oct: Oct
+        month_short_nov: Nov
+        month_short_dec: Dec
+        
+        today: Today
+        month: Month
+        week: Week
+        day: Day
+        
+        time_am: AM
+        time_pm: PM
+
+        male: Male
+        female: Female
+
+        up: Up
+        down: Down
+        expand_all: Expand all
+        collapse_all: Collapse all
+        reload: Reload
+        root: Root
+
+        width: Width
+        height: Height
+
+        created_at:   Created at
+        modified_at:    Modified at
+        from:    From
+        to:    To
+        by:    By
+        file: File
+        file_size: File Size
+        duration: Duration
+        duration_in_minutes: Duration in minutes
+        subject: Subject
+        details: Details
+        mobile: Mobile
+        phone_number: Phone Number
+        resume: Resume
+        
+    messages:
+        the_entry_has_been_added: The entry has been added
+        the_entry_has_been_updated: The entry has been updated
+        the_entry_has_been_copied: The entry has been copied
+        the_entry_has_been_deleted: The entry(s) has been deleted
+        unable_to_find_the_entity: Unable to find "%entity%" entity.
+        unable_to_delete_the_entity_because_used: Unable to delete "%name%", it might be used for some related data
+        are_you_sure: Are you sure?
+        are_you_sure_delete: Are you sure you want delete this item(s)?
+        are_you_sure_activate: Are you sure you want activate this item(s)?
+        are_you_sure_deactivate: Are you sure you want deactivate this item(s)?
+        action_aborted: Action aborted. No items were selected.
+        confirm_batch_message: Are you sure you want to confirm this action and execute it for the selected element?
+        action_aborted_no_items_were_selected: Action aborted. No items were selected.
+        no_sufficient_permissions: You don't have sufficient permissions to enter this page.
+        are_you_sure_delete_permanently: Are you sure that you want these items to be deleted permanently?
+        this_items_will_be_deleted: These items will be deleted
+        the_following_items_will_not_be_deleted: The following items will not be deleted because there is data associated with them elsewhere
+        unable_to_save_the_entity_because_translations: An error occurred while saving ... Please check all tabs
+        select_some_options: Select Some Options
+        select_some_items_first: Select some items first
+        access_denied: Access Denied
+        invalid_mimet_ypes: The mime type of the file is invalid. Allowed mime types are %types%.
+        insufficient_acl_permissions:   You don't have enough permissions to accomplish this operation
+        error_downloading_file: Error Downloading File
+        please_waiting: Please Waiting
+    log:
+        add_user: User with id number %entity_id% has been added
+        edit_user: User with id number %entity_id% has been edited
+        delete_user: User with id number %entity_id% has been deleted
+        edit_profile: Has modified his profile
+        user_has_been_deleted: The user id %id% with username "%username%" has been deleted
+    config:
+        general_section: General Section
+        session_max_idle_time: Session max idle time
+        admin_email: Admin email

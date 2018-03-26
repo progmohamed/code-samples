@@ -1,0 +1,103 @@
+<table class="table table-bordered table-striped">
+    <tbody>
+    <tr>
+        <th width="100">{{ 'admin.titles.id'|trans }}</th>
+        <td>{{ entity.id }}</td>
+    </tr>
+    <tr>
+        <th>{{ 'admin.titles.username'|trans }}</th>
+        <td>{{ entity.username }}</td>
+    </tr>
+    <tr>
+        <th>{{ 'admin.titles.real_name'|trans }}</th>
+        <td>{{ entity.realName }}</td>
+    </tr>
+    <tr>
+        <th>{{ 'admin.titles.email'|trans }}</th>
+        <td>{{ entity.email }}</td>
+    </tr>
+    <tr>
+        <th>{{ 'admin.titles.date_of_birth'|trans }}</th>
+        <td>{{ entity.dateOfBirth|date('Y-m-d') }}</td>
+    </tr>
+    <tr>
+        <th>{{ 'admin.titles.phone_number'|trans }}</th>
+        <td>{{ entity.phoneNumber }}</td>
+    </tr>
+    <tr>
+        <th>{{ 'admin.titles.registration_dateTime'|trans }}</th>
+        <td>{{ entity.registrationDateTime|date('Y-m-d H:i:s') }}</td>
+    </tr>
+    <tr>
+        <th>{{ 'admin.titles.gender'|trans }}</th>
+        <td>
+            {% if entity.sex == 1 %}
+                {{ 'admin.titles.male'|trans }}
+            {% else %}
+                {{ 'admin.titles.female'|trans }}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>{{ 'admin.titles.website'|trans }}</th>
+        <td>{{ entity.personalWebsite }}</td>
+    </tr>
+    <tr>
+        <th>{{ 'admin.titles.resume'|trans }}</th>
+        <td>{{ entity.resume|nl2br }}</td>
+    </tr>
+    <tr>
+        <th>{{ 'admin.titles.country'|trans }}</th>
+        <td>{{ country }}</td>
+    </tr>
+    <tr>
+        <th>{{ 'admin.titles.groups'|trans }}</th>
+        <td>
+            {% if entity.getGroups()|length %}
+            <ul>
+            {% for group in entity.getGroups() %}
+                <li>{{ group.name }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>{{ 'admin.titles.photo'|trans }}</th>
+        <td>
+            {% if entity.photo %}
+                <div>
+                    <a class="fancybox" rel="gallery" href="{{ asset(entity.getPhotoWebPath()) }}" title="">
+                        <img src="{{ asset(entity.getPhotoWebPath()) }}?{{ uniq_id() }}" style="max-width: 100px;"/></a>
+                </div>
+            {% else %}
+                <img src="{{ asset('bundles/admin/images/user.png') }}" />
+            {% endif %}
+        </td>
+    </tr>
+    {#<tr>#}
+        {#<th>صفحة الملف الشخصي العام</th>#}
+        {#<td>#}
+            {#<a href="{{ url('front_user_public_profile', {'id': entity.id }) }}" target="_blank">{{ url('front_user_public_profile', {'id': entity.id }) }}</a>#}
+        {#</td>#}
+    {#</tr>#}
+    <tr>
+        <th>{{ 'admin.titles.active'|trans }}</th>
+        <td>
+            {% if entity.enabled %}
+                <span class="icon-check"></span>
+            {% else %}
+                <span class=" icon-check-empty"></span>
+            {% endif %}
+        </td>
+    </tr>
+    {% if entity.isAdmin %}
+    <tr>
+        <th>مدير عام الموقع</th>
+        <td>
+            <span class="icon-check"></span>        
+        </td>
+    </tr>
+    {% endif %}
+    </tbody>
+</table>

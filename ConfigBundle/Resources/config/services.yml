@@ -1,0 +1,12 @@
+services:
+    config.datafixtures.service:
+        class: ConfigBundle\Service\DataFixturesService
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - { name: datafixtures.service, priority: 2 }
+
+    config.service:
+        class: ConfigBundle\Service\ConfigService
+        calls:
+            - [setContainer, ['@service_container']]

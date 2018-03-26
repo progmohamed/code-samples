@@ -1,0 +1,212 @@
+{% extends ':admin:base.html.twig' %}
+{% import "AdminBundle:Main:_helper.html.twig" as helper %}
+
+{% set sideMenuActiveSection = 'admin_user_management' %}
+
+{% block head %}
+    {{ parent()  }}
+    <link rel="stylesheet" href="{{ asset('bundles/admin/ace/assets/css/chosen.css') }}" />
+{% endblock %}
+
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">{{ 'admin.titles.home'|trans }}</a>
+            </li>
+            <li class="active">{{ 'admin.menu.users'|trans }}</li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block gridFilter %}
+    {% form_theme formFilter ':admin:filterFormTheme.html.twig' %}
+    {{ form_errors(formFilter) }}
+    <form id="gridFilter" novalidate action="{{formFilter.vars.action}}" method="post">
+    {{ form_rest(formFilter) }}
+    <br>
+    <button name="submit" class="btn btn-sm btn-primary" type="submit">{{ 'admin.titles.search'|trans }}</button>
+    <button name="reset" class="btn btn-sm" type="reset">{{ 'admin.titles.reset'|trans }}</button>
+    </form>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="page-header">
+        <h1>{{ 'admin.menu.users'|trans }}</h1>
+    </div>
+
+    <div class="btn-group screenTopButtons">
+        <a class="btn btn-sm btn-success" href="{{ path('admin_user_new') }}">{{ 'admin.titles.add'|trans }}</a>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive">
+                <form action="{{ path('admin_user_batch') }}" method="post" class="gridForm">
+                <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th class="center" width="35">
+                            <label>
+                                <input type="checkbox" class="ace" />
+                                <span class="lbl"></span>
+                            </label>
+                        </th>
+                        <th>{{ knp_pagination_sortable(entities, 'admin.titles.id'|trans, 't.id') }}</th>
+                        <th>{{ knp_pagination_sortable(entities, 'admin.titles.username'|trans, 't.username') }}</th>
+                        <th>{{ knp_pagination_sortable(entities, 'admin.titles.real_name'|trans, 't.realName') }}</th>
+                        <th>{{ knp_pagination_sortable(entities, 'admin.titles.email'|trans, 't.email') }}</th>
+                        <th>{{ knp_pagination_sortable(entities, 'admin.titles.country'|trans, 'country') }}</th>
+                        <th>{{ 'admin.titles.photo'|trans }}</th>
+                        <th>
+                            <i class="icon-time bigger-110 hidden-480"></i>
+                            {{ knp_pagination_sortable(entities, 'admin.titles.registration_dateTime'|trans, 't.registrationDateTime') }}
+                        </th>
+                        <th>{{ knp_pagination_sortable(entities, 'admin.titles.gender'|trans, 't.sex') }}</th>
+                        <th>{{ knp_pagination_sortable(entities, 'admin.titles.active'|trans , 't.enabled') }}</th>
+
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for entity in entities %}
+                        <tr>
+                            <td class="center" width="35">
+                                <label>
+                                    <input type="checkbox" class="ace" value="{{ entity.user.id }}" name="idx[]" />
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+                            <td>{{ entity.user.id }}</td>
+                            <td>{{ entity.user.username }}</td>
+                            <td>{{ entity.user.realName }}</td>
+                            <td>{{ entity.user.email }}</td>
+                            <td>{{ entity.country }}</td>
+                            <td>
+                                {% if entity.user.photo %}
+                                <a class="fancybox" rel="gallery" href="{{ asset('upload/user/'~entity.user.photo) }}" title="">
+                                    <img src="{{ asset('upload/user/'~entity.user.photo) }}?{{ uniq_id() }}" style="max-width: 50px;"/></a>
+                                {% else %}
+                                    <img src="{{ asset('bundles/admin/images/user.png') }}" />
+                                {% endif %}
+                            </td>
+                            <td>{{ entity.user.registrationDateTime|date('Y-m-d') }}</td>
+                            <td>
+                                {% if entity.user.sex == 1 %}     {{ 'admin.titles.male'|trans }}
+                                {% else %}                        {{ 'admin.titles.female'|trans }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if entity.user.enabled %}
+                                    <span class="icon-check"></span>
+                                {% else %}
+                                    <span class=" icon-check-empty"></span>
+                                {% endif %}
+                            </td>                           
+                            <td>
+                                <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+                                    <a class="blue" href="{{ path('admin_user_show', { 'id': entity.user.id }) }}">
+                                        <i class="icon-zoom-in bigger-130"></i>
+                                    </a>
+
+                                    <a class="green" href="{{ path('admin_user_edit', { 'id': entity.user.id }) }}">
+                                        <i class="icon-pencil bigger-130"></i>
+                                    </a>
+
+                                    {#<a class="deleteRow red" href="#" url="{{ path('admin_user_delete', { 'id': entity.user.id, 'redirect': app.request.uri|base64_encode }) }}">#}
+                                        {#<i class="icon-trash bigger-130"></i>#}
+                                    {#</a>#}
+
+                                    <a class="red" href="{{ path('admin_user_delete', { 'id': entity.user.id, 'single': true, 'redirect': app.request.uri|base64_encode }) }}">
+                                        <i class="icon-trash bigger-130"></i>
+                                    </a>
+
+                                </div>
+
+                                <div class="visible-xs visible-sm hidden-md hidden-lg">
+                                    <div class="inline position-relative">
+                                        <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown">
+                                            <i class="icon-caret-down icon-only bigger-120"></i>
+                                        </button>
+
+                                        <ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
+                                            <li>
+                                                <a href="{{ path('admin_user_show', { 'id': entity.user.id }) }}" class="tooltip-info" data-rel="tooltip" title="View">
+                                                    <span class="blue">
+                                                        <i class="icon-zoom-in bigger-120"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="{{ path('admin_user_edit', { 'id': entity.user.id }) }}" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                    <span class="green">
+                                                        <i class="icon-edit bigger-120"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="#" url="{{ path('admin_user_delete', { 'id': entity.user.id, 'redirect': app.request.uri|base64_encode }) }}" class="deleteRow tooltip-error" data-rel="tooltip" title="Delete">
+                                                    <span class="red">
+                                                        <i class="icon-trash bigger-120"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="form-inline">
+                    <label for="all_elements" class="checkbox"></label>
+                    <select name="action">
+                        <option value="delete">{{ 'admin.titles.delete'|trans }}</option>
+                        <option value="activate">{{ 'admin.titles.activate'|trans }}</option>
+                        <option value="deactivate">{{ 'admin.titles.deactivate'|trans }}</option>
+                    </select>
+                    <input type="submit" value="Ok" class="btn btn-sm btn-primary">
+                </div>
+                </form>
+            </div><!-- /.table-responsive -->
+        </div><!-- /span -->
+        {{ knp_pagination_render(entities) }}
+
+    </div><!-- /row -->
+{% endblock %}
+
+
+{% block bottomScripts %}
+    {{ helper.gridJavaScripts(path('admin_user')) }}
+    {% include ':admin:_fancyboxIncludes.html.twig' %}
+    <script type="text/javascript">
+        jQuery(function($) {
+            jQuery(function($) {
+                $(".fancybox").fancybox({
+                    openEffect	: 'none',
+                    closeEffect	: 'none',
+                    nextEffect : 'none',
+                    prevEffect : 'none',
+                    helpers: {
+                        overlay: {
+                            locked: false
+                        }
+                    }
+                });
+            });
+        })
+    </script>
+{% endblock %}

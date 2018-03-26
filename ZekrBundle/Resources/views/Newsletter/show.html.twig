@@ -1,0 +1,60 @@
+{% extends ':admin:base.html.twig' %}
+
+{% set sideMenuActiveSection = 'zekr' %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">الرئيسة</a>
+            </li>
+            <li><a href="{{ path('zekr_newsletter_list') }}">مشتركي الرسائل الإخبارية</a></li>
+            <li class="active">مشترك الرسائل الإخبارية</li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-header">
+        <h1>مشترك الرسائل الإخبارية</h1>
+    </div>
+
+    <div class="btn-group fly">
+        <a class="btn btn-sm btn-inverse" href="{{ path('zekr_newsletter_list') }}">القائمة</a>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+
+            <table class="table table-bordered table-striped">
+                <tbody>
+                <tr>
+                    <th width="100">Id</th>
+                    <td>{{ entity.id }}</td>
+
+                </tr>
+                <tr>
+                    <th>الإسم</th>
+                    <td>{{ entity.name }}</td>
+                </tr>
+                <tr>
+                    <th>البريد الإلكتروني</th>
+                    <td>{{ entity.email }}</td>
+                </tr>
+                <tr>
+                    <th>اللغة</th>
+                    <td>{{ adminHelper.getLanguageByLocale(entity.locale).name }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}

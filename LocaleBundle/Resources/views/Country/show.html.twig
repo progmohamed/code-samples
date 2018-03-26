@@ -1,0 +1,76 @@
+{% extends ':admin:base.html.twig' %}
+
+{% set sideMenuActiveSection = 'locale_management' %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">{{ 'admin.titles.home'|trans }}</a>
+            </li>
+            <li><a href="{{ path('locale_country') }}">{{ 'locale.menu.countries'|trans }}</a></li>
+            <li class="active">{{ 'locale.titles.country.show_item'|trans }}</li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-header">
+        <h1>{{ 'locale.titles.country.show_item'|trans }}</h1>
+    </div>
+
+    <div class="btn-group screenTopButtons">
+        <a class="btn btn-sm btn-inverse" href="{{ path('locale_country') }}">{{ 'admin.titles.list'|trans }}</a>
+        <a class="btn btn-sm btn-success" href="{{ path('locale_country_new') }}">{{ 'admin.titles.add'|trans }}</a>
+        <a class="btn btn-sm btn-info" href="{{ path('locale_country_edit', { 'id': entity.id }) }}">{{ 'admin.titles.edit'|trans }}</a>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+
+            <table class="table table-bordered table-striped">
+                <tbody>
+                <tr>
+                    <th width="100">{{ 'admin.titles.id'|trans }}</th>
+                    <td>{{ entity.id }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="tabbable">
+                            <ul class="nav nav-tabs" id="myTab">
+                                {% for language in localeService.getContentLanguages() %}
+                                    <li{% if loop.first %} class="active"{% endif %}>
+                                        <a data-toggle="tab" href="#tab{{ language.id }}">{{ language.name }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <div class="tab-content">
+                                {% for language in localeService.getContentLanguages() %}
+                                    <div id="tab{{ language.id }}" class="tab-pane{% if loop.first %} in active{% endif %}">
+                                        <table class="table table-bordered table-striped">
+                                            <tbody>
+                                            <tr>
+                                                <th width="150">{{ 'admin.titles.country'|trans }}</th>
+                                                <td>{{ entity.translate(language.locale, false).name }}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}

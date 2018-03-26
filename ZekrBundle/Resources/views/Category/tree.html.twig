@@ -1,0 +1,351 @@
+{% extends ':admin:base.html.twig' %}
+{% import "AdminBundle:Main:_helper.html.twig" as helper %}
+
+{% set sideMenuActiveSection = 'zekr' %}
+
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/admin/ace/assets/css/jquery-ui-1.10.3.full.min.css') }}" />
+    <style>
+        /*ul.fancytree-container {*/
+            /*border: none !important;*/
+        /*}*/
+    </style>
+{% endblock %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">الرئيسة</a>
+            </li>
+            <li class="active">التصنيف الموضوعي</li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h1>التصنيف الموضوعي</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="tabbable">
+                <ul class="nav nav-tabs" id="myTab">
+                    <li class="active">
+                        <a data-toggle="tab" href="#general_tree">
+                            <i class="green icon-home bigger-110"></i> شجرة التصنيفات الموضوعية
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="general_tree" class="tab-pane in active">
+                        <div class="btn-group fly">
+                            <button id="btnDialogAdd" class="btn btn-sm btn-success">إضافة</button>
+                            <button id="btnDialogEdit" class="btn btn-sm btn-success">تعديل</button>
+                            <button id="btnCategoryDelete" class="btn btn-sm btn-success">حذف</button>
+                            <button id="btnMoveUp" class="btn btn-sm btn-success">أعلى</button>
+                            <button id="btnMoveDown" class="btn btn-sm btn-success">أسفل</button>
+
+                            <button id="btnExpandall" class="btn btn-sm btn-success">تمديد الكل</button>
+                            <button id="btnCollapseAll" class="btn btn-sm btn-success">إغلاق الكل</button>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="table-responsive">
+                                    <div id="categoryTree">
+                                        <ul id="treeData" style="display: none;"></ul>
+                                    </div>
+                                </div><!-- /.table-responsive -->
+                            </div><!-- /span -->
+                        </div><!-- /row -->
+                    </div>
+
+                    <div id="source_tree" class="tab-pane">
+                        <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="dialog-add-edit" class="hide">
+        <h3 class="smaller lighter grey">
+            <i class="icon-spinner icon-spin bigger-125"></i>
+            <span>برجاء الإنتظار</span>
+        </h3>
+        <iframe src="" class="hide iframeInDialog"></iframe>
+    </div><!-- #dialog-add-edit -->
+
+{% endblock %}
+
+{% block bottomScripts %}
+    <script src="{{ asset('bundles/admin/js/fancytree/lib/jquery-ui.custom.js') }}"></script>
+    <link href="{{ asset('bundles/admin/js/fancytree/src/skin-win8/ui.fancytree.css') }}" rel="stylesheet">
+    <script src="{{ asset('bundles/admin/js/fancytree/src/jquery.fancytree.js') }}"></script>
+    <script src="{{ asset('bundles/admin/js/fancytree/src/jquery.fancytree.dnd.js') }}"></script>
+
+    <script src="{{ asset('bundles/admin/ace/assets/js/jquery-ui-1.10.3.full.min.js') }}"></script>
+    <script src="{{ asset('bundles/admin/ace/assets/js/jquery.ui.touch-punch.min.js') }}"></script>
+
+    <script type="text/javascript">
+        var treeSelector = "#categoryTree";
+        var selectedNode = null;
+
+        function addNewCategoryThenCloseDialog(key, title) {
+            var selectedNode = $(treeSelector).fancytree("getActiveNode");
+            selectedNode.addNode({'key':key, 'title': title}, 'child');
+            selectedNode.setExpanded(true);
+            fixNodeIcons();
+            $('#dialog-add-edit').dialog("close");
+        }
+        function editCategoryThenCloseDialog(key, title) {
+            var selectedNode = $(treeSelector).fancytree("getActiveNode");
+            selectedNode.setTitle(title);
+//            selectedNode.icon = type == '1' ? 'folder.gif' : 'document.gif';
+            selectedNode.renderTitle();
+            fixNodeIcons();
+            $('#dialog-add-edit').dialog("close");
+        }
+
+        function fixNodeIcons() {
+            $(treeSelector).fancytree("getRootNode").visit(function(node){
+                    node.icon = 'document.gif';
+                    node.renderTitle();
+                    node.icon = 'folder1.gif';
+                    node.renderTitle();
+            });
+        }
+
+        jQuery(function($) {
+            $(treeSelector).fancytree({
+                extensions: ["dnd"],
+                rtl: true,
+                imagePath: "{{ asset('bundles/admin/images/tree_icons/rtl/') }}",
+                autoActivate: true,
+                focusOnSelect: true,
+                source: {
+                    url: "{{ path('zekr_category_get_data') }}"
+                },
+                dnd: {
+                    focusOnClick: true,
+                    dragStart: function(node, data) {
+                        selectedNode = node;
+                        return true;
+                    },
+                    dragEnter: function(node, data) {
+                        return true;
+                    },
+                    dragDrop: function(node, data) {
+                        enableTree(treeSelector, false);
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ path('zekr_category_move') }}",
+                            data: {
+                                'moveId' : data.otherNode.key,
+                                'toId' : node.key,
+                                'mode': data.hitMode
+                            },
+                            dataType: "json",
+                        }).done(function(json) {
+                            if(!json.success) {
+                                alert(json.message);
+                            }else {
+                                data.otherNode.moveTo(node, data.hitMode);
+                                fixNodeIcons();
+                            }
+                        }).always(function() {
+                            enableTree(treeSelector, true);
+                        }).fail(function() {
+                        });
+                    }
+                },
+                activate: function(event, data) {
+                    var node = data.node;
+                    selectedNode = node;
+                },
+                create: function(event, data) {
+                },
+                init: function(event, data, flag) {
+                }
+            });
+
+            function enableTree(selector, enable) {
+                if(enable) {
+                    $(selector).fancytree("enable");
+                }else{
+                    $(selector).fancytree("disable");
+                }
+            }
+
+            $('#btnCategoryDelete').click(function() {
+                if(selectedNode) {
+                    if(selectedNode.key != 0) {
+                        bootbox.confirm("هل أنت متأكد", function (result) {
+                            if (result) {
+                                enableTree(treeSelector, false);
+                                $.ajax({
+                                    method: "POST",
+                                    url: "{{ path('zekr_category_delete') }}",
+                                    data: {
+                                        'id': selectedNode.key
+                                    },
+                                    dataType: "json"
+                                }).done(function (json) {
+                                    if (!json.success) {
+                                        alert(json.message);
+                                    } else {
+                                        selectedNode.remove();
+                                        selectedNode = null;
+                                    }
+                                }).always(function () {
+                                    enableTree(treeSelector, true);
+                                }).fail(function () {
+                                });
+                            }
+                        });
+                    }else{
+                        alert('لا يمكن حذف الجذر');
+                    }
+                }else{
+                    alert('اختر أحد التصنيفات أولاً');
+                }
+            });
+
+            $('#btnExpandall').click(function() {
+                $(treeSelector).fancytree("getRootNode").visit(function(node){
+                    node.setExpanded(true);
+                });
+            });
+
+            $('#btnCollapseAll').click(function() {
+                $(treeSelector).fancytree("getRootNode").visit(function(node){
+                    if(node.key != 0) {
+                        node.setExpanded(false);
+                    }
+                });
+            });
+
+
+            $('#btnMoveUp').click(function() {
+                 if(selectedNode) {
+                    var prevSibling = selectedNode.getPrevSibling();
+                    if(prevSibling) {
+                        enableTree(treeSelector, false);
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ path('zekr_category_move_up') }}",
+                            data: {
+                                'id' : selectedNode.key
+                            },
+                            dataType: "json"
+                        }).done(function(json) {
+                            if(!json.success) {
+                                alert(json.message);
+                            }else {
+                                var temp = selectedNode;
+                                var newNode = jQuery.extend(false, {}, temp);
+                                prevSibling.addNode(newNode, 'before');
+                                temp.remove();
+                                selectedNode = newNode;
+                                $(treeSelector).fancytree("getTree").activateKey(selectedNode.key);
+                                fixNodeIcons();
+                            }
+                        }).always(function() {
+                            enableTree(treeSelector, true);
+                        }).fail(function() {
+                        });
+                    }
+                }
+            });
+
+            $('#btnMoveDown').click(function() {
+                if(selectedNode) {
+                    var nextSibling = selectedNode.getNextSibling();
+                    if(nextSibling) {
+                        enableTree(treeSelector, false);
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ path('zekr_category_move_down') }}",
+                            data: {
+                                'id' : selectedNode.key
+                            },
+                            dataType: "json"
+                        }).done(function(json) {
+                            if(!json.success) {
+                                alert(json.message);
+                            }else {
+                                var temp = selectedNode;
+                                var newNode = jQuery.extend(false, {}, temp);
+                                nextSibling.appendSibling(newNode, 'after');
+                                temp.remove();
+                                selectedNode = newNode;
+                                $(treeSelector).fancytree("getTree").activateKey(selectedNode.key);
+                                fixNodeIcons();
+                            }
+                        }).always(function() {
+                            enableTree(treeSelector, true);
+                        }).fail(function() {
+                        });
+                    }
+                }
+            });
+
+            $("#dialog-add-edit").find('iframe').on("load", function() {
+                $('#dialog-add-edit > h3').hide();
+                $(this).removeClass('hide');
+            });
+
+            function showAddEditDialog(title, url) {
+                $('#dialog-add-edit > h3').show();
+                $("#dialog-add-edit").find('iframe').addClass('hide').attr('src', url);;
+                var dialog = $("#dialog-add-edit").removeClass('hide').dialog({
+                    modal: true,
+                    width: 500,
+                    height: 400,
+                    title: title,
+                    buttons: [{
+                        text: "إغلاق",
+                        "class": "btn btn-xs",
+                        click: function () {
+                            $(this).dialog("close");
+                        }
+                    }]
+                });
+            }
+
+            $("#btnDialogAdd").on('click', function(e) {
+                if(!selectedNode) {
+                    alert('اختر تصنيف أب');
+                }else {
+                    var url = '{{ path('zekr_category_new', {'parent': 'XYZ'}) }}';
+                    url = url.replace('XYZ', selectedNode.key);
+                    showAddEditDialog('إضافة تصنيف', url);
+                }
+            });
+
+            $("#btnDialogEdit").on('click', function(e) {
+                if(selectedNode && selectedNode.key != 0) {
+                    var url = '{{ path('zekr_category_edit', {'id': 'XYZ'}) }}';
+                    url = url.replace('XYZ', selectedNode.key);
+                    showAddEditDialog('تعديل تصنيف', url);
+                }else {
+                    alert('اختر تصنيفاً');
+                }
+            });
+
+        });
+    </script>
+
+{% endblock %}

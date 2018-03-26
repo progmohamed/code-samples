@@ -1,0 +1,10 @@
+caching:
+    menu:
+        management: إدارة التخزين المؤقت
+        parts_management: إدارة أجزاء التخزين المؤقت
+    hints:
+        management: وهنا تجد التحكم في التخزين المؤقت
+        parts_management: وهنا تجد التحكم في كل جزء من التخزين المؤقت
+    titles:
+        flush_all: حذف كل العناصر
+        key: المفتاح

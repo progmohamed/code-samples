@@ -1,0 +1,5 @@
+config:
+    menu:
+        config: Config
+    hints:
+        config: This is the main section to control Config.

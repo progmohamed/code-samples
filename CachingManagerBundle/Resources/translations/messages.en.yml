@@ -1,0 +1,10 @@
+caching:
+    menu:
+        management: Caching Management
+        parts_management: Caching Parts Management
+    hints:
+        management: Here you will find control of the Caching
+        parts_management: Here you will find control of Caching Parts
+    titles:
+        flush_all: Flush All
+        key: Key

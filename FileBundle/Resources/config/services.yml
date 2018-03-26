@@ -1,0 +1,5 @@
+services:
+    file.service:
+        class: FileBundle\Service\FileService\FileService
+        calls:
+            - [setContainer, ['@service_container']]

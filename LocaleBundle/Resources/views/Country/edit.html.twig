@@ -1,0 +1,82 @@
+{% extends ':admin:base.html.twig' %}
+
+{% import "AdminBundle:Main:_helper.html.twig" as helper %}
+
+{% set sideMenuActiveSection = 'locale_management' %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">{{ 'admin.titles.home'|trans }}</a>
+            </li>
+            <li><a href="{{ path('locale_country') }}">{{ 'locale.menu.countries'|trans }}</a></li>
+            <li class="active">{{ 'locale.titles.country.edit_item'|trans }}</li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ 'locale.titles.country.edit_item'|trans }}</h1>
+</div>
+
+<div class="btn-group screenTopButtons">
+    <a class="btn btn-sm btn-inverse" href="{{ path('locale_country') }}">{{ 'admin.titles.list'|trans }}</a>
+    <a class="btn btn-sm btn-success" href="{{ path('locale_country_new') }}">{{ 'admin.titles.add'|trans }}</a>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        {{ helper.showTranslatableFormErrorAlertIfAny(edit_form) }}
+
+        {{ form_errors(edit_form) }}
+        {{ form_start(edit_form, {'attr': {'novalidate':'true', 'class': 'form-horizontal', 'role':'form'}}) }}
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs" id="myTab">
+                {% for language in localeService.getContentLanguages() %}
+                    <li{% if loop.first %} class="active"{% endif %}>
+                        <a data-toggle="tab" href="#tab{{ language.id }}">{{ language.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="tab-content">
+                {% for language in localeService.getContentLanguages() %}
+                    <div id="tab{{ language.id }}" class="tab-pane{% if loop.first %} in active{% endif %}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(edit_form['name_'~language.locale]) }} </label>
+                            <div class="col-sm-10">
+                                {{ form_errors(edit_form['name_'~language.locale]) }}
+                                {{ form_widget(edit_form['name_'~language.locale]) }}
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+        {{ form_rest(edit_form) }}
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-2 col-md-10">
+                    <button class="btn btn-info" type="submit" name="submit">
+                        <i class="icon-ok bigger-110"></i> {{ 'admin.titles.edit'|trans }}
+                    </button>
+                </div>
+            </div>
+        {{ form_end(edit_form) }}
+    </div>
+</div>
+
+{% endblock %}
+

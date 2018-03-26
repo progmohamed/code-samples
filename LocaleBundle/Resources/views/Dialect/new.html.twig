@@ -1,0 +1,83 @@
+{% extends ':admin:base.html.twig' %}
+
+{% import "AdminBundle:Main:_helper.html.twig" as helper %}
+
+{% set sideMenuActiveSection = 'locale_management' %}
+
+{% set pageTitle = 'locale.titles.dialect.new_item'|trans %}
+
+{% block breadcrumb %}
+
+    {{ helper.breadcrumb([
+        ['locale.menu.dialect'|trans, path('locale_dialect_list')],
+        [pageTitle]
+    ]) }}
+
+{% endblock %}
+
+{% block content %}
+
+{{ helper.pageTitle(pageTitle) }}
+
+<div class="btn-group screenTopButtons">
+    <a class="btn btn-sm btn-inverse" href="{{ path('locale_dialect_list') }}">{{ 'admin.titles.list'|trans }}</a>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        {{ helper.showTranslatableFormErrorAlertIfAny(form) }}
+
+        {{ form_errors(form) }}
+        {{ form_start(form, {'attr': {'novalidate':'true', 'class': 'form-horizontal', 'role':'form'}}) }}
+
+
+        <div class="space-4"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.language) }} </label>
+            <div class="col-sm-10">
+                <label>
+                    {{ form_errors(form.language) }}
+                    {{ form_widget(form.language) }}
+                    <span class="lbl"></span>
+                </label>
+
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+        <div class="tabbable">
+            <ul class="nav nav-tabs" id="myTab">
+                {% for language in localeService.getContentLanguages() %}
+                    <li{% if loop.first %} class="active"{% endif %}>
+                        <a data-toggle="tab" href="#tab{{ language.id }}">{{ language.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="tab-content">
+                {% for language in localeService.getContentLanguages() %}
+                    <div id="tab{{ language.id }}" class="tab-pane{% if loop.first %} in active{% endif %}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form['name_'~language.locale]) }} </label>
+                            <div class="col-sm-10">
+                                {{ form_errors(form['name_'~language.locale]) }}
+                                {{ form_widget(form['name_'~language.locale]) }}
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+        {{ form_rest(form) }}
+
+
+        {{ helper.formSubmitButton('admin.titles.add'|trans) }}
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+{% endblock %}

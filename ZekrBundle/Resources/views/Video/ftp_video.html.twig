@@ -1,0 +1,233 @@
+{% extends ':admin:base.html.twig' %}
+
+{% import "AdminBundle:Main:_helper.html.twig" as helper %}
+
+{% set sideMenuActiveSection = 'zekr' %}
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/admin/ace/assets/css/chosen.css') }}" />
+{% endblock %}
+
+{% block breadcrumb %}
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="{{ path('admin_main_home') }}">الرئيسة</a>
+            </li>
+            <li><a href="{{ path('zekr_video_list') }}">الفيديوهات</a></li>
+            <li class="active">FTP video</li>
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+<div class="page-header">
+    <h1>FTP video</h1>
+</div>
+
+<div class="btn-group fly">
+    <a class="btn btn-sm btn-inverse" href="{{ path('zekr_video_list') }}">القائمة</a>
+    <a class="btn btn-sm btn-success" href="{{ path('zekr_video_new') }}">إضافة</a>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        {{ helper.showTranslatableFormErrorAlertIfAny(form) }}
+
+
+        {{ form_errors(form) }}
+        {{ form_start(form, {'attr': {'novalidate':'true', 'class': 'form-horizontal', 'role':'form'}}) }}
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.videos) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(form.videos) }}
+                {{ form_widget(form.videos) }}
+            </div>
+        </div>
+
+
+        <div class="space-10"></div>
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs" id="myTab">
+                {% for language in adminHelper.getLanguages() %}
+                    <li{% if loop.first %} class="active"{% endif %}>
+                        <a data-toggle="tab" href="#tab{{ language.id }}">{{ language.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="tab-content">
+                {% for language in adminHelper.getLanguages() %}
+                    <div id="tab{{ language.id }}" class="tab-pane{% if loop.first %} in active{% endif %}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right"
+                            > {{ form_label(form['display_'~language.locale]) }} </label>
+                            <div class="col-sm-10">
+                                <label>
+                                    {{ form_errors(form['display_'~language.locale]) }}
+                                    {{ form_widget(form['display_'~language.locale]) }}
+                                    <span class="lbl"></span>
+                                </label>
+
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="space-10"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.category) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(form.category) }}
+                {{ form_widget(form.category) }}
+            </div>
+        </div>
+
+        <div class="space-10"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+            > {{ form_label(form.juz) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(form.juz) }}
+                {{ form_widget(form.juz) }}
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+            > {{ form_label(form.hizb) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(form.hizb) }}
+                {{ form_widget(form.hizb) }}
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+            > {{ form_label(form.surah) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(form.surah) }}
+                {{ form_widget(form.surah) }}
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+            > {{ form_label(form.person) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(form.person) }}
+                {{ form_widget(form.person) }}
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+            > {{ form_label(form.videoType) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(form.videoType) }}
+                {{ form_widget(form.videoType) }}
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+            > {{ form_label(form.rewaya) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(form.rewaya) }}
+                {{ form_widget(form.rewaya) }}
+            </div>
+        </div>
+
+        <div class="space-10"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.collection) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(form.collection) }}
+                {{ form_widget(form.collection) }}
+            </div>
+        </div>
+
+        <div class="space-10"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+            > {{ form_label(form.apiProject) }} </label>
+            <div class="col-sm-10">
+                {{ form_errors(form.apiProject) }}
+                {{ form_widget(form.apiProject) }}
+            </div>
+        </div>
+
+        <div class="space-4"></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"
+            > {{ form_label(form.active) }} </label>
+            <div class="col-sm-10">
+                <label>
+                    {{ form_errors(form.active) }}
+                    {{ form_widget(form.active) }}
+                    <span class="lbl"></span>
+                </label>
+            </div>
+        </div>
+        <div class="space-4"></div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"> {{ form_label(form.conversion) }} </label>
+            <div class="col-sm-10">
+                <label>
+                    {{ form_errors(form.conversion) }}
+                    {{ form_widget(form.conversion) }}
+                    <span class="lbl"></span>
+                </label>
+
+            </div>
+        </div>
+
+        {{ form_rest(form) }}
+
+        <div class="clearfix form-actions">
+            <div class="col-md-offset-2 col-md-10">
+                <button class="btn btn-info" type="submit" name="submit">
+                    <i class="icon-ok bigger-110"></i>                      إضافة
+                </button>
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+{% endblock %}
+{% block bottomScripts %}
+    <script src="{{ asset('bundles/admin/ace/assets/js/chosen.jquery.min.js') }}"></script>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $(".chosen-select").chosen();
+
+        });
+    </script>
+{% endblock %}
